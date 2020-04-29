@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <form>
+            <label for="userInput">Username:</label><br>
+            <input id="userInput" type="text"><br><br>
+        </form>
+        <form>
+            <label for="imgInput">Image name:</label><br>
+            <input id="imgInput" type="text"><br><br>
+        </form>
+        
+        <button id=getUsersButton type="button">Get list of users</button>
+        <button id=addUserButton type="button">Add user</button><br><br>
+        <button id=getImagesButton type="button">Get Images</button><br><br>
+        <button id=addImageButton type="button">Add Image</button>
+        <button id=getImageButton type="button">Get Image</button>
+        <button id=deleteImageButton type="button">Delete Image</button>
+        
+        <p id="response"></p>
+        <script src="service-worker.js"></script>
+    </body>
+</html>
