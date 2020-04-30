@@ -14,22 +14,6 @@ async function getUsersApi() {
 	}
 }
 
-async function newUserApi() {
-	try {
-		await fetch("http://localhost:4567/api/users/new?" + "name=" + getUser())
-			.then(function(response) {
-				return response.json();
-			})
-			.then(function(json){
-				console.log(json);
-				const responseParagraph = document.getElementById('response');
-				responseParagraph.textContent = JSON.stringify(json);
-			})
-	} catch (e) {
-		console.log("An error occured!");
-	}
-}
-
 async function getImagesApi() {
 	try {
 		await fetch("http://localhost:4567/api/images?" + "user=" + getUser())
@@ -62,9 +46,42 @@ async function getImageApi() {
 	}
 }
 
-async function newImageApi() {
+async function newUserApi() {
+	const user = {
+		name: getUser()
+	};
+	const options = {
+		method: 'POST',
+		body: JSON.stringify(user)
+	};
+
 	try {
-		await fetch("http://localhost:4567/api/images/new?" + "user=" + getUser() + "&id=" + getImage())
+		await fetch("http://localhost:4567/api/users/new", options)
+			.then(function(response) {
+				return response.json();
+			})
+			.then(function(json){
+				console.log(json);
+				const responseParagraph = document.getElementById('response');
+				responseParagraph.textContent = JSON.stringify(json);
+			})
+	} catch (e) {
+		console.log("An error occured!");
+	}
+}
+
+async function newImageApi() {
+	const image = {
+		userId: getUser(),
+		name: getImage()
+	};
+	const options = {
+		method: 'POST',
+		body: JSON.stringify(image)
+	};
+
+	try {
+		await fetch("http://localhost:4567/api/images/new", options)
 			.then(function(response) {
 				return response.json();
 			})
