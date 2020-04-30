@@ -1,13 +1,13 @@
 package projectMTDS.model;
 
-class User {
+public class User {
     private String name;
 
-    User(String name){
+    public User(String name){
         this.name = name;
     }
 
-    String getName() {
+   public String getName() {
         return name;
     }
 }

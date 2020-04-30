@@ -1,19 +1,19 @@
 package projectMTDS.model;
 
-class Image {
+public class Image {
     private String userId;
     private String name;
 
-    Image(String userId, String name){
+    public Image(String userId, String name){
         this.name = name;
         this.userId = userId;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    String getUserId() {
+    public String getUserId() {
         return userId;
     }
 }

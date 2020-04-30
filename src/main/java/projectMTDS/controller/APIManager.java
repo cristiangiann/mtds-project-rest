@@ -1,20 +1,28 @@
 package projectMTDS.controller;
 
-import static spark.Spark.get;
-import static spark.Spark.path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import projectMTDS.controller.API.*;
+import projectMTDS.model.ModelManager;
+
+import static spark.Spark.*;
 
 class APIManager {
-    void start(ControllerManager controllerManager) {
+    static Logger logger = LoggerFactory.getLogger(APIManager.class);
+
+    static void start(ModelManager modelManager) {
         path("/api", () -> {
+            before("/*", (request, response) -> {
+                logger.info("Received api call");
+            });
             path("/images", () -> {
-                get("/get",  (request, response) -> controllerManager.getImage(request.queryParams("id"), request.queryParams("user")));
-                get("/new",  (request, response) -> controllerManager.newImage(request.queryParams("id"), request.queryParams("user")));
-                get("/delete",  (request, response) -> controllerManager.deleteImage(request.queryParams("id"), request.queryParams("user")));
-                get("",  (request, response) -> controllerManager.getImages(request.queryParams("user")));
+                get("",  (request, response) -> GetImagesAPI.call(request, response, modelManager));
+                get("/get",  (request, response) -> GetImageAPI.call(request, response, modelManager));
+                post("/new", (request, response) -> AddImageAPI.call(request, response, modelManager));
             });
             path("/users", () -> {
-                get("/new",  (request, response) -> controllerManager.newUser(request.queryParams("name")));
-                get("",  (request, response) -> controllerManager.getUsers());
+                post("/new", (request, response) -> AddUserAPI.call(request, response, modelManager));
+                get("",  (request, response) -> GetUsersAPI.call(request, response, modelManager));
             });
         });
     }
