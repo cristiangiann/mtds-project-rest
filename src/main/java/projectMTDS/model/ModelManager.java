@@ -41,12 +41,16 @@ public class ModelManager {
     }
 
     public void deleteImage(String username, String imageId){
-        getImagesByUser(username).stream()
-                .filter(img -> img.getName().equals(imageId))
-                .findFirst().ifPresent(image -> imageList.remove(image));
+        Image image = getImage(username, imageId);
+        if(image == null) return;
+        imageList.remove(image);
     }
 
-    public boolean existUser(String userId) {
-        return usersMap.containsKey(userId);
+    public boolean existUser(String username) {
+        return usersMap.containsKey(username);
+    }
+
+    public boolean existImage(String username, String imageId) {
+        return getImage(username, imageId) != null;
     }
 }

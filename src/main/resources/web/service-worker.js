@@ -96,8 +96,17 @@ async function newImageApi() {
 }
 
 async function deleteImageApi() {
+	const image = {
+		userId: getUser(),
+		name: getImage()
+	};
+	const options = {
+		method: 'DELETE',
+		body: JSON.stringify(image)
+	};
+	
 	try {
-		await fetch("http://localhost:4567/api/images/delete?" + "user=" + getUser() + "&id=" + getImage())
+		await fetch("http://localhost:4567/api/images/delete", options)
 			.then(function(response) {
 				return response.json();
 			})

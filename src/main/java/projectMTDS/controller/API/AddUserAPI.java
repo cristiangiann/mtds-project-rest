@@ -8,10 +8,9 @@ import spark.Response;
 public class AddUserAPI extends API{
     public static String call(Request request, Response response, ModelManager modelManager) {
         Gson gson = new Gson();
-        String body = request.body();
-        String username = gson.fromJson(body, User.class).getName();
+        String username = getUserFromBody(request).getName();
 
-        if(!checkParameter(username)){
+        if(emptyParameter(username)){
             response.status(400);
             return gson.toJson("User not created. Username is not valid.");
         }

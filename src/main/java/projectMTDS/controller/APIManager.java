@@ -19,6 +19,7 @@ class APIManager {
                 get("",  (request, response) -> GetImagesAPI.call(request, response, modelManager));
                 get("/get",  (request, response) -> GetImageAPI.call(request, response, modelManager));
                 post("/new", (request, response) -> AddImageAPI.call(request, response, modelManager));
+                delete("/delete",  (request, response) ->  DeleteImageAPI.call(request, response, modelManager));
             });
             path("/users", () -> {
                 post("/new", (request, response) -> AddUserAPI.call(request, response, modelManager));

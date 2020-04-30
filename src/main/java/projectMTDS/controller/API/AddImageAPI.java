@@ -8,18 +8,15 @@ import spark.Response;
 public class AddImageAPI extends API{
     public static String call(Request request, Response response, ModelManager modelManager) {
         Gson gson = new Gson();
-        String body = request.body();
-        Image image = gson.fromJson(body, Image.class);
-        String username = image.getUserId();
-        String imageName = image.getName();
+        Image image = getImageFromBody(request);
 
-        if(!checkParameter(username) || !checkParameter(imageName)){
+        if(emptyParameter(image.getUserId()) || emptyParameter(image.getName())){
             response.status(400);
             return gson.toJson("Image not created. Username or Image name are not valid.");
         }
 
-        modelManager.addImage(username, imageName);
+        modelManager.addImage(image.getUserId(), image.getName());
         response.status(201);
-        return gson.toJson("New Image added with name: " + imageName + " into repository of " + username);
+        return gson.toJson("New Image added with name: " + image.getName() + " into repository of " + image.getUserId());
     }
 }
