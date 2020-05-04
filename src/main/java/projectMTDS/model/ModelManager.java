@@ -14,43 +14,44 @@ public class ModelManager {
         imageList = new ArrayList<>();
     }
 
-    private User getUser(String username){
-        return usersMap.get(username);
+    private User getUser(String id){
+        return usersMap.get(id);
     }
 
-    public List<String> getUsers(){
-        return usersMap.values().stream().map(User::getName).collect(Collectors.toList());
+    public List<User> getUsers(){
+        return new ArrayList<>(usersMap.values());
     }
 
-    public List<Image> getImagesByUser(String username){
-        return imageList.stream().filter(image -> image.getUserId().equals(username)).collect(Collectors.toList());
+    public List<Image> getImagesByUser(String userId){
+        return imageList.stream().filter(image -> image.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
-    public Image getImage(String username, String imageId){
-        return getImagesByUser(username).stream()
+    public Image getImage(String userId, String imageId){
+        return getImagesByUser(userId).stream()
                 .filter(image -> image.getName().equals(imageId))
                 .findFirst().orElse(null);
     }
 
-    public void addUser(String username){
-        if(getUser(username) == null) usersMap.put(username, new User(username));
+    public void addUser(String id, String name){
+        //TODO: check values
+        if(getUser(id) == null) usersMap.put(id, new User(id, name));
     }
 
-    public void addImage(String username, String imageName){
-        imageList.add(new Image(username, imageName));
+    public void addImage(String userId, String imageName){
+        imageList.add(new Image(userId, imageName));
     }
 
-    public void deleteImage(String username, String imageId){
-        Image image = getImage(username, imageId);
+    public void deleteImage(String userId, String imageId){
+        Image image = getImage(userId, imageId);
         if(image == null) return;
         imageList.remove(image);
     }
 
-    public boolean existUser(String username) {
-        return usersMap.containsKey(username);
+    public boolean existUser(String userId) {
+        return usersMap.containsKey(userId);
     }
 
-    public boolean existImage(String username, String imageId) {
-        return getImage(username, imageId) != null;
+    public boolean existImage(String userId, String imageId) {
+        return getImage(userId, imageId) != null;
     }
 }

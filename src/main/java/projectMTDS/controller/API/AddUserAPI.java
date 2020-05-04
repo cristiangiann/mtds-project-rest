@@ -8,19 +8,20 @@ import spark.Response;
 public class AddUserAPI extends API{
     public static String call(Request request, Response response, ModelManager modelManager) {
         Gson gson = new Gson();
-        String username = getUserFromBody(request).getName();
+        String userId = getUserFromBody(request).getId();
+        String userName = getUserFromBody(request).getName();
 
-        if(emptyParameter(username)){
+        if(emptyParameter(userId) || emptyParameter(userName)){
             response.status(400);
-            return gson.toJson("User not created. Username is not valid.");
+            return gson.toJson("User not created. Inserted parameters are not valid.");
         }
-        if(modelManager.existUser(username)){
+        if(modelManager.existUser(userId)){
             response.status(409);
-            return gson.toJson("User " + username + " already exists.");
+            return gson.toJson("User " + userId + " already exists.");
         }
 
-        modelManager.addUser(username);
+        modelManager.addUser(userId, userName);
         response.status(201);
-        return gson.toJson("New User added with name: " + username);
+        return gson.toJson("New User added with ID " + userId + " and name " + userName);
     }
 }

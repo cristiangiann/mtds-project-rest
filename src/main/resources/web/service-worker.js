@@ -16,7 +16,7 @@ async function getUsersApi() {
 
 async function getImagesApi() {
 	try {
-		await fetch("http://localhost:4567/api/images?" + "user=" + getUser())
+		await fetch("http://localhost:4567/api/images?" + "user=" + getUserID())
 			.then(function(response) {
 				return response.json();
 			})
@@ -32,7 +32,7 @@ async function getImagesApi() {
 
 async function getImageApi() {
 	try {
-		await fetch("http://localhost:4567/api/images/get?" + "user=" + getUser() + "&id=" + getImage())
+		await fetch("http://localhost:4567/api/images/" + getImage() + "?user=" + getUserID())
 			.then(function(response) {
 				return response.json();
 			})
@@ -48,7 +48,8 @@ async function getImageApi() {
 
 async function newUserApi() {
 	const user = {
-		name: getUser()
+		id: getUserID(),
+		name: getUserName()
 	};
 	const options = {
 		method: 'POST',
@@ -56,7 +57,7 @@ async function newUserApi() {
 	};
 
 	try {
-		await fetch("http://localhost:4567/api/users/new", options)
+		await fetch("http://localhost:4567/api/users", options)
 			.then(function(response) {
 				return response.json();
 			})
@@ -72,7 +73,7 @@ async function newUserApi() {
 
 async function newImageApi() {
 	const image = {
-		userId: getUser(),
+		userId: getUserID(),
 		name: getImage()
 	};
 	const options = {
@@ -81,7 +82,7 @@ async function newImageApi() {
 	};
 
 	try {
-		await fetch("http://localhost:4567/api/images/new", options)
+		await fetch("http://localhost:4567/api/images", options)
 			.then(function(response) {
 				return response.json();
 			})
@@ -97,16 +98,16 @@ async function newImageApi() {
 
 async function deleteImageApi() {
 	const image = {
-		userId: getUser(),
+		userId: getUserID(),
 		name: getImage()
 	};
 	const options = {
 		method: 'DELETE',
 		body: JSON.stringify(image)
 	};
-	
+
 	try {
-		await fetch("http://localhost:4567/api/images/delete", options)
+		await fetch("http://localhost:4567/api/images/" + getImage(), options)
 			.then(function(response) {
 				return response.json();
 			})
@@ -120,8 +121,12 @@ async function deleteImageApi() {
 	}
 }
 
-function getUser(){
-	return document.getElementById('userInput').value;
+function getUserID(){
+	return document.getElementById('userID').value;
+}
+
+function getUserName(){
+	return document.getElementById('userName').value;
 }
 
 function getImage(){
