@@ -16,7 +16,7 @@ async function getUsersApi() {
 
 async function getImagesApi() {
 	try {
-		await fetch("http://localhost:4567/api/images?" + "user=" + getUserID())
+		await fetch("/api/images?" + "user=" + getUserID())
 			.then(function(response) {
 				return response.json();
 			})
@@ -32,7 +32,7 @@ async function getImagesApi() {
 
 async function getImageApi() {
 	try {
-		await fetch("http://localhost:4567/api/images/" + getImage() + "?user=" + getUserID())
+		await fetch("/api/images/" + getImage() + "?user=" + getUserID())
 			.then(function(response) {
 				return response.json();
 			})
@@ -57,7 +57,7 @@ async function newUserApi() {
 	};
 
 	try {
-		await fetch("http://localhost:4567/api/users", options)
+		await fetch("/api/users", options)
 			.then(function(response) {
 				return response.json();
 			})
@@ -82,7 +82,7 @@ async function newImageApi() {
 	};
 
 	try {
-		await fetch("http://localhost:4567/api/images", options)
+		await fetch("/api/images", options)
 			.then(function(response) {
 				return response.json();
 			})
@@ -107,7 +107,7 @@ async function deleteImageApi() {
 	};
 
 	try {
-		await fetch("http://localhost:4567/api/images/" + getImage(), options)
+		await fetch("/api/images/" + getImage(), options)
 			.then(function(response) {
 				return response.json();
 			})

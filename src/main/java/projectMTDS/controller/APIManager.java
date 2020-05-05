@@ -11,6 +11,7 @@ class APIManager {
     static Logger logger = LoggerFactory.getLogger(APIManager.class);
 
     static void start(ModelManager modelManager) {
+        port(80);
         path("/api", () -> {
             before("/*", (request, response) -> {
                 logger.info("Received api call");
