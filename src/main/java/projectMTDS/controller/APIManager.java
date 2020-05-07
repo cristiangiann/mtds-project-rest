@@ -7,14 +7,14 @@ import projectMTDS.model.ModelManager;
 
 import static spark.Spark.*;
 
-class APIManager {
-    static Logger logger = LoggerFactory.getLogger(APIManager.class);
+public class APIManager {
+    public static Logger logger = LoggerFactory.getLogger(APIManager.class);
 
     static void start(ModelManager modelManager) {
         port(80);
         path("/api", () -> {
             before("/*", (request, response) -> {
-                logger.info("Received api call");
+                logger.info("*** Received api call ***");
             });
             path("/images", () -> {
                 get("",  (request, response) -> GetImagesAPI.call(request, response, modelManager));

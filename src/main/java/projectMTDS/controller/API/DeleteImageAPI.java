@@ -1,14 +1,14 @@
 package projectMTDS.controller.API;
 
 import com.google.gson.Gson;
-import projectMTDS.model.Image;
-import projectMTDS.model.ModelManager;
+import projectMTDS.model.*;
 import spark.Request;
 import spark.Response;
 
 public class DeleteImageAPI extends API{
     public static String call(Request request, Response response, ModelManager modelManager) {
         Gson gson = new Gson();
+        logRequestData(request);
         Image image = getImageFromBody(request);
         String imageId = request.params(":id");
 

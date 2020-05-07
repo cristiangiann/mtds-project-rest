@@ -8,6 +8,7 @@ import spark.Response;
 public class AddUserAPI extends API{
     public static String call(Request request, Response response, ModelManager modelManager) {
         Gson gson = new Gson();
+        logRequestData(request);
         String userId = getUserFromBody(request).getId();
         String userName = getUserFromBody(request).getName();
 
