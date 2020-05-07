@@ -12,7 +12,9 @@
         <form>
             <label for="imgInput">Image name:</label><br>
             <input id="imgInput" type="text"><br><br>
-            <input id="imageFileInput" type="file" id="image" accept="image/*">
+            <input id="imageFileInput" type="file" id="image" accept="image/*"><br><br>
+            <label for="imgId">Image ID:</label><br>
+            <input id="imgId" type="text"><br>
         </form><br><br>
 
         <button id=getUsersButton type="button">Get list of users</button>
@@ -21,8 +23,8 @@
         <button id=addImageButton type="button">Add Image</button>
         <button id=getImageButton type="button">Get Image</button>
         <button id=deleteImageButton type="button">Delete Image</button>
-        
         <p id="response"></p>
+        <img id="displayImage"/>
         <script src="service-worker.js"></script>
     </body>
 </html>

@@ -7,12 +7,12 @@ import java.util.stream.Collectors;
 
 public class ModelManager {
     private HashMap<String, User> usersMap;
-    private List<Image> imageList;
+    private HashMap<String, Image> imagesMap;
     private int lastImageId;
 
     public ModelManager(){
         usersMap = new HashMap<>();
-        imageList = new ArrayList<>();
+        imagesMap = new HashMap<>();
     }
 
     private User getUser(String id){
@@ -24,13 +24,13 @@ public class ModelManager {
     }
 
     public List<Image> getImagesByUser(String userId){
-        return imageList.stream().filter(image -> image.getUserId().equals(userId)).collect(Collectors.toList());
+        return imagesMap.values().stream().filter(image -> image.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
     public Image getImage(String userId, String imageId){
-        return getImagesByUser(userId).stream()
-                .filter(image -> image.getImageId().equals(imageId))
-                .findFirst().orElse(null);
+        Image image = imagesMap.get(imageId);
+        if(image != null && image.getUserId().equals(userId)) return image;
+        return null;
     }
 
     public void addUser(String id, String name){
@@ -40,7 +40,7 @@ public class ModelManager {
 
     public String addImage(String userId, String imageName, String extension){
         Image image = new Image(createNewImageId(), userId, imageName, extension);
-        imageList.add(image);
+        imagesMap.put(image.getImageId(), image);
         return image.getImageId();
     }
 
@@ -52,7 +52,7 @@ public class ModelManager {
     public void deleteImage(String userId, String imageId){
         Image image = getImage(userId, imageId);
         if(image == null) return;
-        imageList.remove(image);
+        imagesMap.remove(imageId);
     }
 
     public boolean existUser(String userId) {

@@ -32,14 +32,11 @@ async function getImagesApi() {
 
 async function getImageApi() {
 	try {
-		await fetch("/api/images/" + getImage() + "?user=" + getUserID())
-			.then(function(response) {
-				return response.json();
-			})
-			.then(function(json){
-				console.log(json);
-				const responseParagraph = document.getElementById('response');
-				responseParagraph.textContent = JSON.stringify(json);
+		await fetch("/api/images/" + getImageId() + "?user=" + getUserID())
+			.then(response => response.blob())
+			.then(image => {
+				var imageUrl = URL.createObjectURL(image);
+				document.querySelector("#displayImage").src = imageUrl;
 			})
 	} catch (e) {
 		console.log("An error occured!");
@@ -134,6 +131,10 @@ function getUserName(){
 
 function getImage(){
 	return document.getElementById('imgInput').value;
+}
+
+function getImageId(){
+	return document.getElementById('imgId').value;
 }
 
 var getUsersButton = document.getElementById('getUsersButton');

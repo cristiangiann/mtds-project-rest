@@ -25,8 +25,8 @@ public class AddImageAPI extends API{
             return gson.toJson("Image not created. Username or Image name are not valid.");
         }
 
-        String extension = getImageExtension(request.raw().getPart("uploaded_image"));
-        String imageId = modelManager.addImage(image.getUserId(), image.getName(), extension);
+        String imageExtension = getImageExtension(request.raw().getPart("uploaded_image"));
+        String imageId = modelManager.addImage(image.getUserId(), image.getName(), imageExtension);
         image = modelManager.getImage(image.getUserId(), imageId);
         createImagesFolder();
         if(uploadImage(request, image)) {
