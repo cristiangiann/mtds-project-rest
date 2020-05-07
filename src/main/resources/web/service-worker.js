@@ -72,13 +72,16 @@ async function newUserApi() {
 }
 
 async function newImageApi() {
-	const image = {
+	const imageProperties = {
 		userId: getUserID(),
 		name: getImage()
 	};
+    const formData = new FormData();
+    formData.append('image_properties', JSON.stringify(imageProperties));
+    formData.append('uploaded_image', document.getElementById('imageFileInput').files[0])
 	const options = {
 		method: 'POST',
-		body: JSON.stringify(image)
+		body: formData
 	};
 
 	try {

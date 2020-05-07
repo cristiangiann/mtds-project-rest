@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 public class ModelManager {
     private HashMap<String, User> usersMap;
     private List<Image> imageList;
+    private int lastImageId;
 
     public ModelManager(){
         usersMap = new HashMap<>();
@@ -28,7 +29,7 @@ public class ModelManager {
 
     public Image getImage(String userId, String imageId){
         return getImagesByUser(userId).stream()
-                .filter(image -> image.getName().equals(imageId))
+                .filter(image -> image.getImageId().equals(imageId))
                 .findFirst().orElse(null);
     }
 
@@ -37,8 +38,15 @@ public class ModelManager {
         if(getUser(id) == null) usersMap.put(id, new User(id, name));
     }
 
-    public void addImage(String userId, String imageName){
-        imageList.add(new Image(userId, imageName));
+    public String addImage(String userId, String imageName, String extension){
+        Image image = new Image(createNewImageId(), userId, imageName, extension);
+        imageList.add(image);
+        return image.getImageId();
+    }
+
+    private String createNewImageId(){
+        lastImageId++;
+        return String.valueOf(lastImageId);
     }
 
     public void deleteImage(String userId, String imageId){
