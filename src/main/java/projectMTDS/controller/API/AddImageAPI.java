@@ -28,7 +28,8 @@ public class AddImageAPI extends API{
         String extension = getImageExtension(request.raw().getPart("uploaded_image"));
         String imageId = modelManager.addImage(image.getUserId(), image.getName(), extension);
         image = modelManager.getImage(image.getUserId(), imageId);
-        if(createImagesFolder() && uploadImage(request, image)) {
+        createImagesFolder();
+        if(uploadImage(request, image)) {
             response.status(201);
             return gson.toJson("New Image added with name: " + image.getName() + " into repository of " + image.getUserId());
         } else {
@@ -37,9 +38,9 @@ public class AddImageAPI extends API{
         }
     }
 
-    private static boolean createImagesFolder() {
+    private static void createImagesFolder() {
         File folder = new File(IMAGE_FOLDER_DIRECTORY);
-        return folder.mkdirs();
+        folder.mkdirs();
     }
 
     private static boolean uploadImage(Request request, Image image) {
