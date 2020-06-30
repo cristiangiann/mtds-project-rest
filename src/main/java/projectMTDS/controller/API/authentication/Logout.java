@@ -1,20 +1,26 @@
-package projectMTDS.controller.API;
+package projectMTDS.controller.API.authentication;
 
 import com.google.gson.Gson;
+import projectMTDS.controller.API.API;
 import projectMTDS.controller.Authenticator;
-import projectMTDS.model.ModelManager;
 import spark.Request;
 import spark.Response;
 
-public class GetImagesAPI extends API{
+public class Logout extends API {
     public static String call(Request request, Response response) {
-        ModelManager modelManager = ModelManager.getInstance();
         Authenticator authenticator = Authenticator.getInstance();
 
         Gson gson = new Gson();
         logRequestData(request);
 
         String userId = authenticator.getUserFromSession(request.cookies());
-        return gson.toJson(modelManager.getImagesByUser(userId));
+        if (userId == null){
+            response.status(404);
+            return gson.toJson("Invalid session");
+        }
+
+        authenticator.logout(request.cookies());
+        response.status(200);
+        return gson.toJson("User " + userId + " successfully logged out");
     }
 }

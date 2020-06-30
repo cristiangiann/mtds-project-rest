@@ -1,6 +1,7 @@
 package projectMTDS.controller.API;
 
 import com.google.gson.Gson;
+import projectMTDS.controller.Authenticator;
 import projectMTDS.model.Image;
 import projectMTDS.model.ModelManager;
 import spark.Request;
@@ -14,26 +15,30 @@ import java.io.*;
 import static projectMTDS.controller.Config.IMAGE_FOLDER_DIRECTORY;
 
 public class AddImageAPI extends API{
-    public static String call(Request request, Response response, ModelManager modelManager) throws IOException, ServletException {
+    public static String call(Request request, Response response) throws IOException, ServletException {
+        ModelManager modelManager = ModelManager.getInstance();
+        Authenticator authenticator = Authenticator.getInstance();
+
         Gson gson = new Gson();
         request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
         logRequestImageFormData(request);
+        String userId = authenticator.getUserFromSession(request.cookies());
 
         Image image = gson.fromJson(request.raw().getParameter("image_properties"), Image.class);
-        if(emptyParameter(image.getUserId()) || emptyParameter(image.getName())){
+        if(emptyParameter(userId) || emptyParameter(image.getName())){
             response.status(400);
             return gson.toJson("Image not created. Username or Image name are not valid.");
         }
 
         String imageExtension = getImageExtension(request.raw().getPart("uploaded_image"));
-        String imageId = modelManager.addImage(image.getUserId(), image.getName(), imageExtension);
-        image = modelManager.getImage(image.getUserId(), imageId);
+        String imageId = modelManager.addImage(userId, image.getName(), imageExtension);
+        image = modelManager.getImage(userId, imageId);
         createImagesFolder();
         if(uploadImage(request, image)) {
             response.status(201);
-            return gson.toJson("New Image added with name: " + image.getName() + " into repository of " + image.getUserId());
+            return gson.toJson("New Image added with name: " + image.getName() + " into repository of " + userId);
         } else {
-            modelManager.deleteImage(image.getUserId(), image.getImageId());
+            modelManager.deleteImage(userId, image.getImageId());
             return gson.toJson("Error uploading image");
         }
     }

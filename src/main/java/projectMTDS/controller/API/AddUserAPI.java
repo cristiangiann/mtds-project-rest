@@ -1,28 +1,31 @@
 package projectMTDS.controller.API;
 
 import com.google.gson.Gson;
-import projectMTDS.model.*;
+import projectMTDS.controller.Authenticator;
 import spark.Request;
 import spark.Response;
 
 public class AddUserAPI extends API{
-    public static String call(Request request, Response response, ModelManager modelManager) {
+    public static String call(Request request, Response response) {
+        Authenticator authenticator = Authenticator.getInstance();
+
         Gson gson = new Gson();
         logRequestData(request);
-        String userId = getUserFromBody(request).getId();
-        String userName = getUserFromBody(request).getName();
+        String userId = getParameterFromBody(request.body(), "id");
+        String userName = getParameterFromBody(request.body(), "name");
+        String password = getParameterFromBody(request.body(), "password");
 
         if(emptyParameter(userId) || emptyParameter(userName)){
             response.status(400);
-            return gson.toJson("User not created. Inserted parameters are not valid.");
-        }
-        if(modelManager.existUser(userId)){
-            response.status(409);
-            return gson.toJson("User " + userId + " already exists.");
+            return gson.toJson("User not created. Parameters are not valid.");
         }
 
-        modelManager.addUser(userId, userName);
-        response.status(201);
-        return gson.toJson("New User added with ID " + userId + " and name " + userName);
+        if(authenticator.addUser(userId, userName, password)) {
+            response.status(201);
+            return gson.toJson("New User added with ID " + userId + " and name " + userName);
+        }
+
+        response.status(409);
+        return gson.toJson("User " + userId + " already exists.");
     }
 }

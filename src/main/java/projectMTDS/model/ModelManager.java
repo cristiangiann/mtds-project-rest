@@ -6,13 +6,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModelManager {
+    private static ModelManager modelManager = null;
     private HashMap<String, User> usersMap;
     private HashMap<String, Image> imagesMap;
+
     private int lastImageId;
 
-    public ModelManager(){
+    private ModelManager(){
         usersMap = new HashMap<>();
         imagesMap = new HashMap<>();
+    }
+
+    public static ModelManager getInstance(){
+        if (modelManager == null) modelManager = new ModelManager();
+        return modelManager;
     }
 
     private User getUser(String id){

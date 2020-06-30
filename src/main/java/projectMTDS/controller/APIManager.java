@@ -3,28 +3,30 @@ package projectMTDS.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import projectMTDS.controller.API.*;
-import projectMTDS.model.ModelManager;
+import projectMTDS.controller.API.authentication.Login;
+import projectMTDS.controller.API.authentication.Logout;
 
 import static spark.Spark.*;
 
 public class APIManager {
     public static Logger logger = LoggerFactory.getLogger(APIManager.class);
 
-    static void start(ModelManager modelManager) {
-        port(80);
+    static void start() {
+        post("/login", Login::call);
+        post("/logout", Logout::call);
         path("/api", () -> {
             before("/*", (request, response) -> {
                 logger.info("*** Received api call ***");
             });
             path("/images", () -> {
-                get("",  (request, response) -> GetImagesAPI.call(request, response, modelManager));
-                get("/:id",  (request, response) -> GetImageAPI.call(request, response, modelManager));
-                post("", (request, response) -> AddImageAPI.call(request, response, modelManager));
-                delete("/:id",  (request, response) ->  DeleteImageAPI.call(request, response, modelManager));
+                get("", GetImagesAPI::call);
+                get("/:id", GetImageAPI::call);
+                post("", AddImageAPI::call);
+                delete("/:id", DeleteImageAPI::call);
             });
             path("/users", () -> {
-                get("",  (request, response) -> GetUsersAPI.call(request, response, modelManager));
-                post("", (request, response) -> AddUserAPI.call(request, response, modelManager));
+                get("", GetUsersAPI::call);
+                post("", AddUserAPI::call);
             });
         });
     }

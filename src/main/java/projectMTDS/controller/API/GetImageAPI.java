@@ -1,5 +1,6 @@
 package projectMTDS.controller.API;
 
+import projectMTDS.controller.Authenticator;
 import projectMTDS.controller.Config;
 import projectMTDS.model.Image;
 import projectMTDS.model.ModelManager;
@@ -11,12 +12,15 @@ import java.io.*;
 import java.nio.file.*;
 
 public class GetImageAPI extends API{
-    public static String call(Request request, Response response, ModelManager modelManager) {
+    public static String call(Request request, Response response) {
+        ModelManager modelManager = ModelManager.getInstance();
+        Authenticator authenticator = Authenticator.getInstance();
+
         logRequestData(request);
-        String username = request.queryParams("user");
+        String userId = authenticator.getUserFromSession(request.cookies());
         String imageId = request.params(":id");
 
-        Image image = modelManager.getImage(username, imageId);
+        Image image = modelManager.getImage(userId, imageId);
         if(image == null) return "Image does not exist";
         Path path = Paths.get(Config.IMAGE_FOLDER_DIRECTORY).resolve(image.getFileName());
         File file = path.toFile();
