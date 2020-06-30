@@ -1,6 +1,5 @@
 package projectMTDS.controller.API;
 
-import com.google.gson.Gson;
 import projectMTDS.controller.Authenticator;
 import projectMTDS.model.Image;
 import projectMTDS.model.ModelManager;
@@ -13,13 +12,13 @@ import javax.servlet.http.Part;
 import java.io.*;
 
 import static projectMTDS.controller.Config.IMAGE_FOLDER_DIRECTORY;
+import static projectMTDS.controller.Utils.gson;
 
 public class AddImageAPI extends API{
     public static String call(Request request, Response response) throws IOException, ServletException {
         ModelManager modelManager = ModelManager.getInstance();
         Authenticator authenticator = Authenticator.getInstance();
 
-        Gson gson = new Gson();
         request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
         logRequestImageFormData(request);
         String userId = authenticator.getUserFromSession(request.cookies());

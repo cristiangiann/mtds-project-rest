@@ -1,17 +1,17 @@
 package projectMTDS.controller.API;
 
-import com.google.gson.Gson;
 import projectMTDS.controller.Authenticator;
-import projectMTDS.model.*;
+import projectMTDS.model.ModelManager;
 import spark.Request;
 import spark.Response;
+
+import static projectMTDS.controller.Utils.gson;
 
 public class DeleteImageAPI extends API{
     public static String call(Request request, Response response) {
         Authenticator authenticator = Authenticator.getInstance();
         ModelManager modelManager = ModelManager.getInstance();
 
-        Gson gson = new Gson();
         logRequestData(request);
         String imageId = request.params(":id");
         String userId = authenticator.getUserFromSession(request.cookies());

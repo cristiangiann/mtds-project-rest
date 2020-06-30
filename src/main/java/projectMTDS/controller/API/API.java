@@ -6,7 +6,8 @@ import projectMTDS.model.Image;
 import spark.Request;
 import spark.utils.StringUtils;
 
-import static projectMTDS.controller.APIManager.logger;
+import static projectMTDS.controller.Utils.gson;
+import static projectMTDS.controller.Utils.logger;
 
 public abstract class API {
     protected static boolean emptyParameter(String parameter){
@@ -14,13 +15,11 @@ public abstract class API {
     }
 
     static Image getImageFromBody(Request request){
-        Gson gson = new Gson();
         String body = request.body();
         return gson.fromJson(body, Image.class);
     }
 
     protected static String getParameterFromBody(String body, String fieldName){
-        Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(body, JsonObject.class);
         return jsonObject.get(fieldName).getAsString();
     }

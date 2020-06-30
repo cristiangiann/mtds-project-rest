@@ -1,15 +1,15 @@
 package projectMTDS.controller.API;
 
-import com.google.gson.Gson;
 import projectMTDS.controller.Authenticator;
 import spark.Request;
 import spark.Response;
+
+import static projectMTDS.controller.Utils.gson;
 
 public class AddUserAPI extends API{
     public static String call(Request request, Response response) {
         Authenticator authenticator = Authenticator.getInstance();
 
-        Gson gson = new Gson();
         logRequestData(request);
         String userId = getParameterFromBody(request.body(), "id");
         String userName = getParameterFromBody(request.body(), "name");

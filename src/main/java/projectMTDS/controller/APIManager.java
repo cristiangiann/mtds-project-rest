@@ -1,16 +1,13 @@
 package projectMTDS.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import projectMTDS.controller.API.*;
 import projectMTDS.controller.API.authentication.Login;
 import projectMTDS.controller.API.authentication.Logout;
 
+import static projectMTDS.controller.Utils.logger;
 import static spark.Spark.*;
 
 public class APIManager {
-    public static Logger logger = LoggerFactory.getLogger(APIManager.class);
-
     static void start() {
         post("/login", Login::call);
         post("/logout", Logout::call);
