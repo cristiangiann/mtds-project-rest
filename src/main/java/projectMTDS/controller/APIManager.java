@@ -1,10 +1,10 @@
 package projectMTDS.controller;
 
-import projectMTDS.controller.API.*;
-import projectMTDS.controller.API.authentication.Login;
-import projectMTDS.controller.API.authentication.Logout;
+import projectMTDS.api.*;
+import projectMTDS.api.authentication.Login;
+import projectMTDS.api.authentication.Logout;
 
-import static projectMTDS.controller.Utils.logger;
+import static projectMTDS.utils.Utils.logger;
 import static spark.Spark.*;
 
 public class APIManager {
