@@ -1,7 +1,6 @@
-package projectMTDS.controller;
+package projectMTDS.authentication;
 
 import projectMTDS.model.ModelManager;
-import projectMTDS.model.Session;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

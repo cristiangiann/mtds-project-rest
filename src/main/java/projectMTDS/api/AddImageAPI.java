@@ -1,6 +1,6 @@
-package projectMTDS.controller.API;
+package projectMTDS.api;
 
-import projectMTDS.controller.Authenticator;
+import projectMTDS.authentication.Authenticator;
 import projectMTDS.model.Image;
 import projectMTDS.model.ModelManager;
 import spark.Request;
@@ -12,7 +12,7 @@ import javax.servlet.http.Part;
 import java.io.*;
 
 import static projectMTDS.controller.Config.IMAGE_FOLDER_DIRECTORY;
-import static projectMTDS.controller.Utils.gson;
+import static projectMTDS.utils.Utils.gson;
 
 public class AddImageAPI extends API{
     public static String call(Request request, Response response) throws IOException, ServletException {

@@ -1,11 +1,12 @@
-package projectMTDS.controller.API;
+package projectMTDS.api;
 
-import projectMTDS.controller.Authenticator;
+import projectMTDS.authentication.Authenticator;
 import projectMTDS.model.ModelManager;
 import spark.Request;
 import spark.Response;
 
-import static projectMTDS.controller.Utils.gson;
+import static projectMTDS.utils.Utils.gson;
+import static projectMTDS.utils.ImageSnapshot.getSnapshotsFromImageList;
 
 public class GetImagesAPI extends API{
     public static String call(Request request, Response response) {
@@ -15,6 +16,6 @@ public class GetImagesAPI extends API{
         logRequestData(request);
 
         String userId = authenticator.getUserFromSession(request.cookies());
-        return gson.toJson(modelManager.getImagesByUser(userId));
+        return gson.toJson(getSnapshotsFromImageList(modelManager.getImagesByUser(userId)));
     }
 }

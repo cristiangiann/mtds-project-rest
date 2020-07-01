@@ -1,12 +1,13 @@
-package projectMTDS.controller.API.authentication;
+package projectMTDS.api.authentication;
 
-import projectMTDS.controller.API.API;
-import projectMTDS.controller.Authenticator;
+import projectMTDS.authentication.Authenticator;
+import projectMTDS.api.API;
+import projectMTDS.utils.Message;
 import spark.Request;
 import spark.Response;
 
-import static projectMTDS.controller.Utils.gson;
-import static projectMTDS.controller.Utils.logger;
+import static projectMTDS.utils.Utils.gson;
+import static projectMTDS.utils.Utils.logger;
 
 public class Login extends API {
     public static String call(Request request, Response response) {
@@ -25,7 +26,6 @@ public class Login extends API {
 
         logger.info("User " + userId + " successfully logged in - Session id: " + sessionId);
         response.cookie("sessionId", sessionId, 36000, false, false);
-        response.status(200);
-        return gson.toJson("User " + userId + " successfully logged in.");
+        return gson.toJson(new Message("User " + userId + " successfully logged in.", "/pages/me.html"));
     }
 }

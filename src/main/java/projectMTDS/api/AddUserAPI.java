@@ -1,10 +1,11 @@
-package projectMTDS.controller.API;
+package projectMTDS.api;
 
-import projectMTDS.controller.Authenticator;
+import projectMTDS.authentication.Authenticator;
+import projectMTDS.utils.Message;
 import spark.Request;
 import spark.Response;
 
-import static projectMTDS.controller.Utils.gson;
+import static projectMTDS.utils.Utils.gson;
 
 public class AddUserAPI extends API{
     public static String call(Request request, Response response) {
@@ -22,7 +23,7 @@ public class AddUserAPI extends API{
 
         if(authenticator.addUser(userId, userName, password)) {
             response.status(201);
-            return gson.toJson("New User added with ID " + userId + " and name " + userName);
+            return gson.toJson(new Message("New User added with ID " + userId + " and name " + userName, "/"));
         }
 
         response.status(409);

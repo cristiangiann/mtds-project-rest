@@ -1,4 +1,4 @@
-package projectMTDS.model;
+package projectMTDS.authentication;
 
 import java.time.Duration;
 import java.util.Date;

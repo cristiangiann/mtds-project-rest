@@ -1,6 +1,6 @@
-package projectMTDS.controller.API;
+package projectMTDS.api;
 
-import projectMTDS.controller.Authenticator;
+import projectMTDS.authentication.Authenticator;
 import projectMTDS.controller.Config;
 import projectMTDS.model.Image;
 import projectMTDS.model.ModelManager;

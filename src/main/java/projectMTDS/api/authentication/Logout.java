@@ -1,11 +1,12 @@
-package projectMTDS.controller.API.authentication;
+package projectMTDS.api.authentication;
 
-import projectMTDS.controller.API.API;
-import projectMTDS.controller.Authenticator;
+import projectMTDS.authentication.Authenticator;
+import projectMTDS.api.API;
+import projectMTDS.utils.Message;
 import spark.Request;
 import spark.Response;
 
-import static projectMTDS.controller.Utils.gson;
+import static projectMTDS.utils.Utils.gson;
 
 public class Logout extends API {
     public static String call(Request request, Response response) {
@@ -20,7 +21,8 @@ public class Logout extends API {
         }
 
         authenticator.logout(request.cookies());
+        response.removeCookie("sessionId");
         response.status(200);
-        return gson.toJson("User " + userId + " successfully logged out");
+        return gson.toJson(new Message("User " + userId + " successfully logged out", "/"));
     }
 }

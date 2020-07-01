@@ -1,11 +1,11 @@
-package projectMTDS.controller.API;
+package projectMTDS.api;
 
-import projectMTDS.controller.Authenticator;
+import projectMTDS.authentication.Authenticator;
 import projectMTDS.model.ModelManager;
 import spark.Request;
 import spark.Response;
 
-import static projectMTDS.controller.Utils.gson;
+import static projectMTDS.utils.Utils.gson;
 
 public class DeleteImageAPI extends API{
     public static String call(Request request, Response response) {

@@ -1,13 +1,12 @@
-package projectMTDS.controller.API;
+package projectMTDS.api;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import projectMTDS.model.Image;
 import spark.Request;
 import spark.utils.StringUtils;
 
-import static projectMTDS.controller.Utils.gson;
-import static projectMTDS.controller.Utils.logger;
+import static projectMTDS.utils.Utils.gson;
+import static projectMTDS.utils.Utils.logger;
 
 public abstract class API {
     protected static boolean emptyParameter(String parameter){
@@ -35,8 +34,4 @@ public abstract class API {
         logger.info("Content type: " + request.contentType());
         logger.info("Image details: " + request.raw().getParameter("image_properties"));
     }
-
-//    static boolean checkAuthorization(String sessionId, String userId){
-//        return Authenticator.getInstance().checkSession(sessionId, userId);
-//    }
 }
