@@ -9,15 +9,17 @@ public class ImageSnapshot {
     private String name;
     private String id;
     private String url;
+    private String previewUrl;
 
     public ImageSnapshot(Image image){
-        this(image.getImageId(), image.getName(), "/images/" + image.getImageId());
+        this(image.getImageId(), image.getName(), "/api/images/" + image.getImageId());
     }
 
     public ImageSnapshot(String id, String name, String url){
         this.id = id;
         this.name = name;
         this.url = url;
+        this.previewUrl = url + "/preview";
     }
 
     public String getId() {

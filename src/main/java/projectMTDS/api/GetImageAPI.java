@@ -12,7 +12,7 @@ import java.io.*;
 import java.nio.file.*;
 
 public class GetImageAPI extends API{
-    public static String call(Request request, Response response) {
+    public static String call(Request request, Response response, boolean preview) {
         ModelManager modelManager = ModelManager.getInstance();
         Authenticator authenticator = Authenticator.getInstance();
 
@@ -22,7 +22,7 @@ public class GetImageAPI extends API{
 
         Image image = modelManager.getImage(userId, imageId);
         if(image == null) return "Image does not exist";
-        Path path = Paths.get(Config.IMAGE_FOLDER_DIRECTORY).resolve(image.getFileName());
+        Path path = Paths.get(Config.IMAGE_FOLDER_DIRECTORY).resolve(preview ? image.getPreviewFileName() : image.getFileName());
         File file = path.toFile();
 
         if (file.exists()) {

@@ -17,7 +17,8 @@ public class APIManager {
             });
             path("/images", () -> {
                 get("", GetImagesAPI::call);
-                get("/:id", GetImageAPI::call);
+                get("/:id", (request, response) -> GetImageAPI.call(request, response, false));
+                get("/:id/preview", (request, response) -> GetImageAPI.call(request, response, true));
                 post("", AddImageAPI::call);
                 delete("/:id", DeleteImageAPI::call);
             });

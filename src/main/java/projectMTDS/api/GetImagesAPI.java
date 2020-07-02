@@ -7,6 +7,7 @@ import spark.Response;
 
 import static projectMTDS.utils.Utils.gson;
 import static projectMTDS.utils.ImageSnapshot.getSnapshotsFromImageList;
+import static projectMTDS.utils.Utils.logger;
 
 public class GetImagesAPI extends API{
     public static String call(Request request, Response response) {
@@ -16,6 +17,7 @@ public class GetImagesAPI extends API{
         logRequestData(request);
 
         String userId = authenticator.getUserFromSession(request.cookies());
+        logger.info("get images received by user " + userId);
         return gson.toJson(getSnapshotsFromImageList(modelManager.getImagesByUser(userId)));
     }
 }

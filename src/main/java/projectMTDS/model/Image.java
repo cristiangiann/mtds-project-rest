@@ -29,6 +29,10 @@ public class Image {
         return id + "." + extension;
     }
 
+    public String getPreviewFileName(){
+        return id + "_preview." + extension;
+    }
+
     public String getExtension() {
         return extension;
     }

@@ -6,6 +6,7 @@
           crossorigin="anonymous">
     <link href="../assets/css/style.css" rel="stylesheet">
     <link href="../assets/css/navbar.css" rel="stylesheet">
+    <link href="../assets/css/gallery.css" rel="stylesheet">
   </head>
   <body>
     <nav class="navbar navbar-expand navbar-dark bg-dark">
@@ -15,28 +16,25 @@
     </nav>
 
     <div class="main-content">
-      <button class="btn btn-lg btn-primary btn-block">
-        <img src="../assets/img/icon/plus.svg"> Add image
-      </button>
-      <table class="table">
-        <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Name</th>
-          <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Name</td>
-          <td>
-            <img src="../assets/img/icon/bin.svg">
-          </td>
-        </tr>
-        </tbody>
-      </table>
+        <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">My Gallery</h1>
+        <hr class="mt-2 mb-5">
+        <button class="btn btn-lg btn-primary btn-block">
+          <img src="../assets/img/icon/plus.svg"> Add image
+        </button>
+        <div id=imageContainer class="row text-center text-lg-left">
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="galleryModal" class="modal">
+      <!-- The Close Button -->
+      <span class="close">&times;</span>
+      <!-- Modal Content (The Image) -->
+      <img class="modal-content" id=modalImg>
+      <!-- Modal Caption (Image Text) -->
+      <div id="caption"></div>
     </div>
   </body>
   <script src="../assets/js/logout.js" crossorigin></script>
+  <script src="../assets/js/gallery.js" crossorigin></script>
 </html>

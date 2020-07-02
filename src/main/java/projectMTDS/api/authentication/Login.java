@@ -26,6 +26,6 @@ public class Login extends API {
 
         logger.info("User " + userId + " successfully logged in - Session id: " + sessionId);
         response.cookie("sessionId", sessionId, 36000, false, false);
-        return gson.toJson(new Message("User " + userId + " successfully logged in.", "/pages/me.html"));
+        return gson.toJson(new Message("User " + userId + " successfully logged in.", "/pages/gallery.html"));
     }
 }

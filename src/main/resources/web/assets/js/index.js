@@ -11,7 +11,7 @@ async function login() {
     try {
         let response = await fetch("/login", options);
         console.log(response.status);
-        let status = await response.status;
+        let status = response.status;
         let body = await response.json();
         if (status === 200) {
             document.location.href = body.url;

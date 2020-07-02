@@ -31,3 +31,7 @@ hs_err_pid*
 /target/
 /src/test/
 /src/main/resources/images/
+
+# Files
+/src/main/resources/web/service-worker.js
+/web/service-worker.js
