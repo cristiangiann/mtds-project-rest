@@ -18,20 +18,48 @@
     <div class="main-content">
         <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">My Gallery</h1>
         <hr class="mt-2 mb-5">
-        <button class="btn btn-lg btn-primary btn-block">
+        <button id=addImageButton class="btn btn-lg btn-primary btn-block">
           <img src="../assets/img/icon/plus.svg"> Add image
         </button>
         <div id=imageContainer class="row text-center text-lg-left">
         </div>
     </div>
 
-    <!-- The Modal -->
     <div id="galleryModal" class="modal">
       <span class="close">&times;</span>
       <img class="modal-content" id=modalImg>
       <div id="caption"></div>
-
     </div>
+
+    <div class="modal" id=uploadImageModal tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Upload image</h5>
+          </div>
+
+          <div class="modal-body">
+            <form>
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" id="inputImageName" placeholder="Image name">
+                </div>
+                <div class="custom-file" id=selectFileDiv>
+                  <input type="file" class="custom-file-input col-sm-3" id="inputImageFile" placeholder="Choose file" accept="image/*">
+                  <label class="custom-file-label" for="inputImageFile">Choose file</label>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id=closeNewImageModal class="btn btn-secondary">Close</button>
+            <button type="button" id=uploadImageButton class="btn btn-primary">Upload</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </body>
   <script src="../assets/js/logout.js" crossorigin></script>
   <script src="../assets/js/gallery.js" crossorigin></script>

@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     let images = await response.json();
     let status = response.status;
     if (status === 200) {
-        images.forEach(addImage);
+        images.forEach(addImagePreview);
     }
 }, false);
 
-function addImage(item){
+function addImagePreview(item){
     const previewUrl = item.previewUrl;
     let div = document.createElement('div');
     div.id = 'container' + item.id;
@@ -39,8 +39,6 @@ function addShowButton(item){
 }
 
 function addDeleteButton(item){
-    const url = item.url;
-
     let deleteButton = document.createElement('button');
     deleteButton.id = 'deleteButton';
     deleteButton.className = 'btn btn-danger btn-sm';
@@ -59,16 +57,12 @@ function openModal(url, name){
     let modalImg = document.getElementById("modalImg");
     modalImg.src = url;
 
-    // Get the image and insert it inside the modal - use its "alt" text as a caption
     let captionText = document.getElementById("caption");
     modal.style.display = "block";
     modalImg.src = url;
     captionText.innerHTML = name;
 
-    // Get the <span> element that closes the modal
     let span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
     }
@@ -79,8 +73,7 @@ async function deleteImage(item) {
         method: 'DELETE',
     };
     try {
-        let response = await fetch("/api/images/" + item.id, options);
-        console.log(response.status);
+        let response = await fetch(item.url, options);
         let status = response.status;
         if (status === 200) {
             location.reload();
@@ -89,3 +82,48 @@ async function deleteImage(item) {
         console.log("An error occured!");
     }
 }
+
+async function uploadImage() {
+    const imageProperties = {
+        name: document.getElementById('inputImageName').value
+    };
+    const formData = new FormData();
+    formData.append('image_properties', JSON.stringify(imageProperties));
+    formData.append('uploaded_image', document.getElementById('inputImageFile').files[0]);
+    const options = {
+        method: 'POST',
+        body: formData
+    };
+
+    try {
+        let response = await fetch("/api/images", options);
+        let status = response.status;
+        if (status === 201) {
+            location.reload();
+        }
+    } catch (e) {
+        console.log("An error occured!");
+    }
+}
+
+function newImageButtonClick(){
+    let modal = document.getElementById("uploadImageModal");
+    modal.style.display = "block";
+
+    let span = document.getElementById("closeNewImageModal");
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+}
+
+document.querySelector('.custom-file-input').addEventListener('change',function(e){
+    let fileName = document.getElementById("inputImageFile").files[0].name;
+    let label = e.target.nextElementSibling;
+    label.innerText = fileName;
+});
+
+let uploadImageButton = document.getElementById('uploadImageButton');
+uploadImageButton.addEventListener('click', uploadImage);
+
+let addImageButton = document.getElementById("addImageButton");
+addImageButton.addEventListener('click', newImageButtonClick);
