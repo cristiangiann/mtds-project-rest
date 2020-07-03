@@ -8,7 +8,7 @@ public class Session {
     private String userId;
     private Date startDate;
 
-    public Session(String sessionId, String userId){
+    Session(String sessionId, String userId){
         this.id = sessionId;
         this.userId = userId;
         this.startDate = new Date();

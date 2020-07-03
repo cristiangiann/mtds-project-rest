@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static spark.utils.StringUtils.isEmpty;
+
 public class Authenticator {
     private static Authenticator authenticator = null;
     private ModelManager modelManager;
@@ -27,7 +29,8 @@ public class Authenticator {
     }
 
     public String login(String userId, String password){
-        if(modelManager.existUser(userId)) {
+        if (userId == null || password == null) return null;
+        if (modelManager.existUser(userId)) {
             if(checkPassword(userId, password)) {
                 String sessionId = generateId();
                 Session session = new Session(sessionId, userId);
@@ -38,7 +41,7 @@ public class Authenticator {
         return null;
     }
 
-    public boolean logout(String sessionId){
+    private boolean logout(String sessionId){
         return sessionMap.remove(sessionId) != null;
     }
 
@@ -47,8 +50,8 @@ public class Authenticator {
     }
 
     public boolean addUser(String id, String name, String password){
-        //TODO: check values
-        if(!modelManager.existUser(id)) {
+        if (isEmpty(id) || isEmpty(name) || isEmpty(password)) return false;
+        if (!modelManager.existUser(id)) {
             modelManager.addUser(id, name);
             credentialsMap.put(id, getHash(password));
             return true;

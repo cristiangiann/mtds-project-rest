@@ -19,12 +19,11 @@ public class AddImageAPI extends API{
     public static String call(Request request, Response response) {
         ModelManager modelManager = ModelManager.getInstance();
         Authenticator authenticator = Authenticator.getInstance();
+        request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
 
         logRequestImageFormData(request);
         String userId = authenticator.getUserFromSession(request.cookies());
         if(userId == null) return invalidSession(response);
-
-        request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
         try {
             Image image = gson.fromJson(request.raw().getParameter("image_properties"), Image.class);
             if (emptyParameter(userId) || emptyParameter(image.getName())) {
@@ -33,7 +32,7 @@ public class AddImageAPI extends API{
             }
 
             String imageExtension = getImageExtension(request.raw().getPart("uploaded_image"));
-            if(imageExtension == null) throw new InvalidNameException("");
+            if(imageExtension == null) throw new InvalidNameException("Error - Unsupported media type");
             String imageId = modelManager.addImage(userId, image.getName(), imageExtension, request.raw().getPart("uploaded_image").getInputStream());
 
             if (imageId != null) {
@@ -44,7 +43,7 @@ public class AddImageAPI extends API{
                 return gson.toJson("New Image added with name: " + image.getName() + " into repository of " + userId);
             }
         } catch (Exception e) {
-            logger.info("Error - Unsupported media type - return 415 status");
+            logger.info(e.getMessage());
             response.status(415);
             return gson.toJson("Unsupported media type");
         }
