@@ -6,9 +6,12 @@ import projectMTDS.model.ModelManager;
 import spark.Request;
 import spark.Response;
 
+import javax.imageio.ImageIO;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 import static projectMTDS.controller.Config.IMAGE_FOLDER_DIRECTORY;
@@ -55,10 +58,31 @@ public class AddImageAPI extends API{
             OutputStream outStream = new FileOutputStream(targetFile);
             outStream.write(buffer);
             outStream.close();
+            saveResizedImage(targetFile, IMAGE_FOLDER_DIRECTORY + image.getPreviewFileName(), image);
         } catch (Exception e) {
             return false;
         }
         return true;
+    }
+
+    private static void saveResizedImage(File inputImageFile, String outputImagePath, Image image) throws IOException {
+        BufferedImage inputImage = ImageIO.read(inputImageFile);
+        int scaledWidth;
+        int scaledHeight;
+        if(inputImage.getHeight() > inputImage.getWidth()) {
+            scaledHeight = 300;
+            scaledWidth =  (int)((double) inputImage.getWidth() / inputImage.getHeight() * 300);
+        } else {
+            scaledWidth = 300;
+            scaledHeight = (int)((double) inputImage.getHeight() / inputImage.getWidth() * 300);
+        }
+
+        BufferedImage outputImage = new BufferedImage(scaledWidth, scaledHeight, inputImage.getType());
+
+        Graphics2D g2d = outputImage.createGraphics();
+        g2d.drawImage(inputImage, 0, 0, scaledWidth, scaledHeight, null);
+        g2d.dispose();
+        ImageIO.write(outputImage, image.getExtension(), new File(outputImagePath));
     }
 
     private static String getImageExtension(Part part) {
