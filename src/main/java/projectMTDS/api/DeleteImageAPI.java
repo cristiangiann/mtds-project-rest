@@ -13,12 +13,13 @@ public class DeleteImageAPI extends API{
         ModelManager modelManager = ModelManager.getInstance();
 
         logRequestData(request);
-        String imageId = request.params(":id");
         String userId = authenticator.getUserFromSession(request.cookies());
+        if(userId == null) return invalidSession(response);
 
-        if(emptyParameter(userId) || emptyParameter(imageId)){
+        String imageId = request.params(":id");
+        if(emptyParameter(imageId)){
             response.status(400);
-            return gson.toJson("Image not deleted. Username or Image name are not valid.");
+            return gson.toJson("Image ID is not valid.");
         }
 
         if(!modelManager.existImage(userId, imageId)){

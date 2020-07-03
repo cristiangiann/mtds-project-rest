@@ -18,6 +18,8 @@ public class GetImageAPI extends API{
 
         logRequestData(request);
         String userId = authenticator.getUserFromSession(request.cookies());
+        if(userId == null) return invalidSession(response);
+
         String imageId = request.params(":id");
 
         Image image = modelManager.getImage(userId, imageId);

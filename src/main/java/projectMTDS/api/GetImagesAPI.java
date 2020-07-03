@@ -17,7 +17,10 @@ public class GetImagesAPI extends API{
         logRequestData(request);
 
         String userId = authenticator.getUserFromSession(request.cookies());
+        if(userId == null) return invalidSession(response);
+
         logger.info("GET images received by user " + userId);
+        response.status(200);
         return gson.toJson(getSnapshotsFromImageList(modelManager.getImagesByUser(userId)));
     }
 }

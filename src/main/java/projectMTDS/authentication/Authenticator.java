@@ -61,7 +61,10 @@ public class Authenticator {
     }
 
     public String getUserFromSession(Map<String, String> cookie) {
-        return sessionMap.get(cookie.get("sessionId")).getUserId();
+        String sessionId = cookie.get("sessionId");
+        if (sessionId == null) return null;
+        Session session = sessionMap.get(sessionId);
+        return session == null ? null : session.getUserId();
     }
 
     private boolean checkPassword(String userId, String password){

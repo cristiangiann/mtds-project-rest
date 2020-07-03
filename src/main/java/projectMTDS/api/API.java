@@ -2,7 +2,9 @@ package projectMTDS.api;
 
 import com.google.gson.JsonObject;
 import projectMTDS.model.Image;
+import projectMTDS.utils.Message;
 import spark.Request;
+import spark.Response;
 import spark.utils.StringUtils;
 
 import static projectMTDS.utils.Utils.gson;
@@ -35,5 +37,11 @@ public abstract class API {
                 "Request method: " + request.requestMethod() + "\n\t\t" +
                 "Content type: " + request.contentType() + "\n\t\t" +
                 "Image details: " + request.raw().getParameter("image_properties"));
+    }
+
+    static String invalidSession(Response response){
+        logger.info("Bad Request error - Invalid session");
+        response.status(401);
+        return gson.toJson(new Message("Invalid session", "/"));
     }
 }

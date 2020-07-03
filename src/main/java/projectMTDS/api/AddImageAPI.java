@@ -8,24 +8,23 @@ import spark.Response;
 
 import javax.naming.InvalidNameException;
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletException;
 import javax.servlet.http.Part;
 import java.io.File;
-import java.io.IOException;
 
 import static projectMTDS.controller.Config.IMAGE_FOLDER_DIRECTORY;
 import static projectMTDS.utils.Utils.gson;
 import static projectMTDS.utils.Utils.logger;
 
 public class AddImageAPI extends API{
-    public static String call(Request request, Response response) throws IOException, ServletException {
+    public static String call(Request request, Response response) {
         ModelManager modelManager = ModelManager.getInstance();
         Authenticator authenticator = Authenticator.getInstance();
 
-        request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
         logRequestImageFormData(request);
         String userId = authenticator.getUserFromSession(request.cookies());
+        if(userId == null) return invalidSession(response);
 
+        request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
         try {
             Image image = gson.fromJson(request.raw().getParameter("image_properties"), Image.class);
             if (emptyParameter(userId) || emptyParameter(image.getName())) {
