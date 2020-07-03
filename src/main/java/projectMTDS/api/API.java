@@ -24,14 +24,16 @@ public abstract class API {
     }
 
     protected static void logRequestData(Request request) {
-        logger.info("Request method: " + request.requestMethod());
-        logger.info("Content type: " + request.contentType());
-        logger.info("Request body: " + request.body());
+        logger.info("New API call - Path: " + request.pathInfo() + "\n\t\t" +
+                "Request method: " + request.requestMethod() + "\n\t\t" +
+                "Content type: " + request.contentType() + "\n\t\t" +
+                "Request body: " + request.body());
     }
 
     static void logRequestImageFormData(Request request){
-        logger.info("Request method: " + request.requestMethod());
-        logger.info("Content type: " + request.contentType());
-        logger.info("Image details: " + request.raw().getParameter("image_properties"));
+        logger.info("New API call - Path: " + request.pathInfo() + "\n\t\t" +
+                "Request method: " + request.requestMethod() + "\n\t\t" +
+                "Content type: " + request.contentType() + "\n\t\t" +
+                "Image details: " + request.raw().getParameter("image_properties"));
     }
 }

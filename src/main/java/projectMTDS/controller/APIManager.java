@@ -4,7 +4,6 @@ import projectMTDS.api.*;
 import projectMTDS.api.authentication.Login;
 import projectMTDS.api.authentication.Logout;
 
-import static projectMTDS.utils.Utils.logger;
 import static spark.Spark.*;
 
 public class APIManager {
@@ -12,9 +11,6 @@ public class APIManager {
         post("/login", Login::call);
         post("/logout", Logout::call);
         path("/api", () -> {
-            before("/*", (request, response) -> {
-                logger.info("*** Received api call ***");
-            });
             path("/images", () -> {
                 get("", GetImagesAPI::call);
                 get("/:id", (request, response) -> GetImageAPI.call(request, response, false));
