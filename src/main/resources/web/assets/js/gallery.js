@@ -20,6 +20,13 @@ function addImagePreview(item){
         "</a>\n";
 
     document.getElementById('imageContainer').appendChild(div);
+
+    let showModal = function() {
+        openModal(item.url, item.name);
+    };
+    let imagePreview = document.getElementById("imagePreview_" + item.id);
+    imagePreview.onclick = showModal;
+
     addShowButton(item, blockId);
     addDeleteButton(item, blockId);
 }
