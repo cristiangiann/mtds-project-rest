@@ -9,20 +9,22 @@ document.addEventListener('DOMContentLoaded', async function() {
 }, false);
 
 function addImagePreview(item){
+    const blockId = "imagePreviewBlock_" + item.id;
     const previewUrl = item.previewUrl;
     let div = document.createElement('div');
     div.id = 'container' + item.id;
-    div.className = "col-lg-3 col-md-4 col-6";
-    div.innerHTML = "<a href='#' class='d-block mb-4 h-100\'>\n" +
-        "<img class='img-fluid img-thumbnail preview-image' src='" + previewUrl + "' alt=''>\n" +
+    div.className = "col-lg-3 col-md-4 col-6 text-center";
+    div.innerHTML = "<a href='#' class='d-block mb-4 h-100\' id=" + blockId + ">\n" +
+        "<img class='img-fluid img-thumbnail preview-image' " +
+                "id=imagePreview_" + item.id + " src='" + previewUrl + "' alt='" + item.name + "'>\n" +
         "</a>\n";
 
-    document.getElementById("imageContainer").appendChild(div);
-    addShowButton(item);
-    addDeleteButton(item);
+    document.getElementById('imageContainer').appendChild(div);
+    addShowButton(item, blockId);
+    addDeleteButton(item, blockId);
 }
 
-function addShowButton(item){
+function addShowButton(item, blockId){
     const url = item.url;
     const imageName = item.name;
 
@@ -35,10 +37,10 @@ function addShowButton(item){
         openModal(url, imageName);
     };
     showButton.onclick = showModal;
-    document.getElementById("container" + item.id).appendChild(showButton);
+    document.getElementById(blockId).appendChild(showButton);
 }
 
-function addDeleteButton(item){
+function addDeleteButton(item, blockId){
     let deleteButton = document.createElement('button');
     deleteButton.id = 'deleteButton';
     deleteButton.className = 'btn btn-danger btn-sm';
@@ -49,7 +51,7 @@ function addDeleteButton(item){
     };
     deleteButton.onclick = deleteImageOnClick;
 
-    document.getElementById("container" + item.id).appendChild(deleteButton);
+    document.getElementById(blockId).appendChild(deleteButton);
 }
 
 function openModal(url, name){
