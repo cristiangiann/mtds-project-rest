@@ -1,15 +1,15 @@
 package projectMTDS.controller;
 
 import projectMTDS.api.*;
-import projectMTDS.api.authentication.Login;
-import projectMTDS.api.authentication.Logout;
+import projectMTDS.api.LoginAPI;
+import projectMTDS.api.LogoutAPI;
 
 import static spark.Spark.*;
 
 public class APIManager {
     static void start() {
-        post("/login", Login::call);
-        post("/logout", Logout::call);
+        post("/login", LoginAPI::call);
+        post("/logout", LogoutAPI::call);
         path("/api", () -> {
             path("/images", () -> {
                 get("", GetImagesAPI::call);

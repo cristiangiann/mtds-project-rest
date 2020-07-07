@@ -5,7 +5,10 @@ import projectMTDS.model.ModelManager;
 import spark.Request;
 import spark.Response;
 
-import static projectMTDS.utils.Utils.gson;
+import java.util.HashMap;
+import java.util.Map;
+
+import static projectMTDS.utils.Utils.*;
 
 public class DeleteImageAPI extends API{
     public static String call(Request request, Response response) {
@@ -29,6 +32,12 @@ public class DeleteImageAPI extends API{
 
         modelManager.deleteImage(userId, imageId);
         response.status(200);
-        return gson.toJson("Image deleted: " + imageId + " from repository of " + userId);
+        return createResponseBody(relatedLinks());
+    }
+
+    static private Map<String, String> relatedLinks(){
+        Map<String, String> linkMap = new HashMap<>();
+        addUrl(linkMap, "redirect_to", GALLERY_URL);
+        return linkMap;
     }
 }

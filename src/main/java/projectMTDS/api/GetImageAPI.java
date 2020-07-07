@@ -10,6 +10,10 @@ import spark.Response;
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.nio.file.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import static projectMTDS.utils.Utils.*;
 
 public class GetImageAPI extends API{
     public static String call(Request request, Response response, boolean preview) {
@@ -31,11 +35,19 @@ public class GetImageAPI extends API{
             response.raw().setContentType("image/" + image.getExtension());
             try (OutputStream out = response.raw().getOutputStream()) {
                 ImageIO.write(ImageIO.read(file), image.getExtension(), out);
-                return String.join("", Files.readAllLines(path));
+                return createResponseBody(String.join("", Files.readAllLines(path)), relatedLinks(imageId));
             } catch (IOException e) {
                 return "Exception occurred while reading file" + e.getMessage();
             }
         }
         return "File does not exist";
+    }
+
+    static private Map<String, String> relatedLinks(String id){
+        Map<String, String> linkMap = new HashMap<>();
+        addUrl(linkMap, "gallery", GALLERY_URL);
+        addUrl(linkMap, "logout", LOGOUT_API_URL);
+        addUrl(linkMap, "self", imageUrl(id));
+        return linkMap;
     }
 }

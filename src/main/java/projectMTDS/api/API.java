@@ -1,23 +1,28 @@
 package projectMTDS.api;
 
 import com.google.gson.JsonObject;
-import projectMTDS.model.Image;
 import projectMTDS.utils.Message;
 import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
 
+import java.util.Map;
+
 import static projectMTDS.utils.Utils.gson;
 import static projectMTDS.utils.Utils.logger;
 
 public abstract class API {
-    protected static boolean emptyParameter(String parameter){
-        return StringUtils.isEmpty(parameter);
+    private static class ResponseBody {
+        private Object response;
+        private Map<String, String> _links;
+        private ResponseBody(Object response, Map<String, String> links){
+            this.response = response;
+            this._links = links;
+        }
     }
 
-    static Image getImageFromBody(Request request){
-        String body = request.body();
-        return gson.fromJson(body, Image.class);
+    static boolean emptyParameter(String parameter){
+        return StringUtils.isEmpty(parameter);
     }
 
     protected static String getParameterFromBody(String body, String fieldName){
@@ -43,5 +48,18 @@ public abstract class API {
         logger.info("Bad Request error - Invalid session");
         response.status(401);
         return gson.toJson(new Message("Invalid session", "/"));
+    }
+
+    public static void addUrl(Map<String, String> resources, String resourceName, String resourceUrl){
+        resources.put(resourceName, resourceUrl);
+    }
+
+    static String createResponseBody(Object response, Map<String, String> links){
+        ResponseBody responseBody = new ResponseBody(response, links);
+        return gson.toJson(responseBody);
+    }
+
+    static String createResponseBody(Map<String, String> links){
+        return createResponseBody(null, links);
     }
 }

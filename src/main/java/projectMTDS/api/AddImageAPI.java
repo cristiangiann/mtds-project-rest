@@ -10,10 +10,11 @@ import javax.naming.InvalidNameException;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static projectMTDS.controller.Config.IMAGE_FOLDER_DIRECTORY;
-import static projectMTDS.utils.Utils.gson;
-import static projectMTDS.utils.Utils.logger;
+import static projectMTDS.utils.Utils.*;
 
 public class AddImageAPI extends API{
     public static String call(Request request, Response response) {
@@ -40,7 +41,7 @@ public class AddImageAPI extends API{
                 createImagesFolder();
                 logger.info("New Image added with name: " + image.getName() + " into repository of " + userId);
                 response.status(201);
-                return gson.toJson("New Image added with name: " + image.getName() + " into repository of " + userId);
+                return createResponseBody(relatedLinks());
             }
         } catch (Exception e) {
             logger.info(e.getMessage());
@@ -63,5 +64,11 @@ public class AddImageAPI extends API{
         String[] splitString = fileName.split("\\.");
         String extension = splitString[splitString.length - 1];
         return extension.equals("jpg") || extension.equals("png") ? extension : null;
+    }
+
+    static private Map<String, String> relatedLinks(){
+        Map<String, String> linkMap = new HashMap<>();
+        addUrl(linkMap, "redirect_to", GALLERY_URL);
+        return linkMap;
     }
 }

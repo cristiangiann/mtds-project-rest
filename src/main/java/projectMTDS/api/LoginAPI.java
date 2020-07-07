@@ -1,15 +1,15 @@
-package projectMTDS.api.authentication;
+package projectMTDS.api;
 
 import projectMTDS.authentication.Authenticator;
-import projectMTDS.api.API;
-import projectMTDS.utils.Message;
 import spark.Request;
 import spark.Response;
 
-import static projectMTDS.utils.Utils.gson;
-import static projectMTDS.utils.Utils.logger;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Login extends API {
+import static projectMTDS.utils.Utils.*;
+
+public class LoginAPI extends API {
     public static String call(Request request, Response response) {
         Authenticator authenticator = Authenticator.getInstance();
 
@@ -26,6 +26,12 @@ public class Login extends API {
 
         logger.info("User " + userId + " successfully logged in - Session id: " + sessionId);
         response.cookie("sessionId", sessionId, 36000, false, false);
-        return gson.toJson(new Message("User " + userId + " successfully logged in.", "/pages/gallery.html"));
+        return createResponseBody(relatedLinks());
+    }
+
+    static private Map<String, String> relatedLinks(){
+        Map<String, String> linkMap = new HashMap<>();
+        addUrl(linkMap, "redirect_to", GALLERY_URL);
+        return linkMap;
     }
 }

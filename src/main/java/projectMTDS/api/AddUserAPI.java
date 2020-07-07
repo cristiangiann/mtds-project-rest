@@ -1,12 +1,13 @@
 package projectMTDS.api;
 
 import projectMTDS.authentication.Authenticator;
-import projectMTDS.utils.Message;
 import spark.Request;
 import spark.Response;
 
-import static projectMTDS.utils.Utils.gson;
-import static projectMTDS.utils.Utils.logger;
+import java.util.HashMap;
+import java.util.Map;
+
+import static projectMTDS.utils.Utils.*;
 
 public class AddUserAPI extends API{
     public static String call(Request request, Response response) {
@@ -27,11 +28,17 @@ public class AddUserAPI extends API{
         if(authenticator.addUser(userId, userName, password)) {
             logger.info("New user added - userId: " + userId + ", userName: " + userName);
             response.status(201);
-            return gson.toJson(new Message("New User added with ID " + userId + " and name " + userName, "/"));
+            return createResponseBody(relatedLinks());
         }
 
         logger.info("User not created - User with ID " + userId + " already exists");
         response.status(409);
         return gson.toJson("User " + userId + " already exists.");
+    }
+
+    static private Map<String, String> relatedLinks(){
+        Map<String, String> linkMap = new HashMap<>();
+        addUrl(linkMap, "redirect_to", HOME_PAGE_URL);
+        return linkMap;
     }
 }

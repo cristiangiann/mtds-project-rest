@@ -1,14 +1,16 @@
-package projectMTDS.api.authentication;
+package projectMTDS.api;
 
 import projectMTDS.authentication.Authenticator;
-import projectMTDS.api.API;
-import projectMTDS.utils.Message;
 import spark.Request;
 import spark.Response;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static projectMTDS.utils.Utils.HOME_PAGE_URL;
 import static projectMTDS.utils.Utils.gson;
 
-public class Logout extends API {
+public class LogoutAPI extends API {
     public static String call(Request request, Response response) {
         Authenticator authenticator = Authenticator.getInstance();
 
@@ -23,6 +25,12 @@ public class Logout extends API {
         authenticator.logout(request.cookies());
         response.removeCookie("sessionId");
         response.status(200);
-        return gson.toJson(new Message("User " + userId + " successfully logged out", "/"));
+        return createResponseBody(relatedLinks());
+    }
+
+    static private Map<String, String> relatedLinks(){
+        Map<String, String> linkMap = new HashMap<>();
+        addUrl(linkMap, "redirect_to", HOME_PAGE_URL);
+        return linkMap;
     }
 }
