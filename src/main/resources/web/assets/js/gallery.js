@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const options = { method: 'GET' };
     let response = await fetch("/api/images", options);
-    let images = await response.json();
+    let body = await response.json();
+    let images = body.response;
     let status = response.status;
     if (status === 200) {
         images.forEach(addImagePreview);
@@ -84,8 +85,9 @@ async function deleteImage(item) {
     try {
         let response = await fetch(item.url, options);
         let status = response.status;
+        let body = await response.json();
         if (status === 200) {
-            location.reload();
+            document.location.href = body._links.redirect_to;
         }
     } catch (e) {
         console.log("An error occured!");
@@ -107,8 +109,9 @@ async function uploadImage() {
     try {
         let response = await fetch("/api/images", options);
         let status = response.status;
+        let body = await response.json();
         if (status === 201) {
-            location.reload();
+            document.location.href = body._links.redirect_to;
         }
     } catch (e) {
         console.log("An error occured!");

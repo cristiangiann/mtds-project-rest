@@ -15,12 +15,12 @@ async function signUp() {
         let status = await response.status;
         let body = await response.json();
         if (status === 201) {
-            document.location.href = body.url;
+            document.location.href = body._links.redirect_to;
         }
     } catch (e) {
         console.log("An error occured!");
     }
 }
 
-var signUpButton = document.getElementById('signUpButton');
+let signUpButton = document.getElementById('signUpButton');
 signUpButton.addEventListener('click', signUp);

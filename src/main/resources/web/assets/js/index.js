@@ -14,7 +14,7 @@ async function login() {
         let status = response.status;
         let body = await response.json();
         if (status === 200) {
-            document.location.href = body.url;
+            document.location.href = body._links.redirect_to;
         }
     } catch (e) {
         console.log("An error occured!");
