@@ -38,10 +38,8 @@ public class ModelManager {
         return imagesMap.values().stream().filter(image -> image.getUserId().equals(userId)).collect(Collectors.toList());
     }
 
-    public Image getImage(String userId, String imageId){
-        Image image = imagesMap.get(imageId);
-        if(image != null && image.getUserId().equals(userId)) return image;
-        return null;
+    public Image getImage(String imageId){
+        return imagesMap.get(imageId);
     }
 
     public void addUser(String id, String name){
@@ -63,8 +61,8 @@ public class ModelManager {
         return String.valueOf(lastImageId);
     }
 
-    public void deleteImage(String userId, String imageId){
-        Image image = getImage(userId, imageId);
+    public void deleteImage(String imageId){
+        Image image = getImage(imageId);
         if(image == null) return;
 
         File imageFile = new File(IMAGE_FOLDER_DIRECTORY + image.getFileName());
@@ -112,7 +110,7 @@ public class ModelManager {
         return usersMap.containsKey(userId);
     }
 
-    public boolean existImage(String userId, String imageId) {
-        return getImage(userId, imageId) != null;
+    public boolean existImage(String imageId) {
+        return getImage(imageId) != null;
     }
 }

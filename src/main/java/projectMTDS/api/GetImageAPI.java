@@ -21,13 +21,14 @@ public class GetImageAPI extends API{
         Authenticator authenticator = Authenticator.getInstance();
 
         logRequestData(request);
-        String userId = authenticator.getUserFromSession(request.cookies());
-        if(userId == null) return invalidSession(response);
+        String loggedUserId = authenticator.getUserFromSession(request.cookies());
+        if(loggedUserId == null) return invalidSession(response);
 
         String imageId = request.params(":id");
 
-        Image image = modelManager.getImage(userId, imageId);
-        if(image == null) return "Image does not exist";
+        Image image = modelManager.getImage(imageId);
+        if(image == null) return resourceNotFound(response);
+        if (!image.getUserId().equals(loggedUserId)) return unauthorized(response);
         Path path = Paths.get(Config.IMAGE_FOLDER_DIRECTORY).resolve(preview ? image.getPreviewFileName() : image.getFileName());
         File file = path.toFile();
 
@@ -35,7 +36,7 @@ public class GetImageAPI extends API{
             response.raw().setContentType("image/" + image.getExtension());
             try (OutputStream out = response.raw().getOutputStream()) {
                 ImageIO.write(ImageIO.read(file), image.getExtension(), out);
-                return createResponseBody(String.join("", Files.readAllLines(path)), relatedLinks(imageId));
+                return createResponseBody(String.join("", Files.readAllLines(path)), relatedLinks(imageId, 200, preview));
             } catch (IOException e) {
                 return "Exception occurred while reading file" + e.getMessage();
             }
@@ -43,11 +44,17 @@ public class GetImageAPI extends API{
         return "File does not exist";
     }
 
-    static private Map<String, String> relatedLinks(String id){
+    static private Map<String, String> relatedLinks(String id, int status, boolean preview){
         Map<String, String> linkMap = new HashMap<>();
-        addUrl(linkMap, "gallery", GALLERY_URL);
-        addUrl(linkMap, "logout", LOGOUT_API_URL);
-        addUrl(linkMap, "self", imageUrl(id));
+        addLogoutUrl(linkMap);
+        addImagesUrl(linkMap);
+        if(status != 200) return linkMap;
+        if(preview){
+            addSelfUrl(linkMap, imagePreviewUrl(id));
+            addImageUrlById(linkMap, imageUrl(id));
+            return linkMap;
+        }
+        addSelfUrl(linkMap, imageUrl(id));
         return linkMap;
     }
 }

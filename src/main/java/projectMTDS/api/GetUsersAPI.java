@@ -20,9 +20,9 @@ public class GetUsersAPI extends API {
 
     static private Map<String, String> relatedLinks(){
         Map<String, String> linkMap = new HashMap<>();
-        addUrl(linkMap, "login", LOGIN_API_URL);
-        addUrl(linkMap, "sign_up", SIGN_UP_URL);
-        addUrl(linkMap, "self", USERS_API);
+        addLoginUrl(linkMap);
+        addUsersUrl(linkMap);
+        addSelfUrl(linkMap, USERS_API);
         return linkMap;
     }
 }

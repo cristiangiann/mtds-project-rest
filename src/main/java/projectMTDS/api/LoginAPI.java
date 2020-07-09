@@ -21,17 +21,23 @@ public class LoginAPI extends API {
         String sessionId = authenticator.login(userId, password);
         if(sessionId == null){
             response.status(401);
-            return gson.toJson("User and password combination is not valid");
+            createResponseBody(relatedLinks(response.status()));
         }
 
         logger.info("User " + userId + " successfully logged in - Session id: " + sessionId);
         response.cookie("sessionId", sessionId, 36000, false, false);
-        return createResponseBody(relatedLinks());
+        return createResponseBody(relatedLinks(response.status()));
     }
 
-    static private Map<String, String> relatedLinks(){
+    static private Map<String, String> relatedLinks(int status){
         Map<String, String> linkMap = new HashMap<>();
-        addUrl(linkMap, "redirect_to", GALLERY_URL);
+        addSelfUrl(linkMap, LOGIN_API_URL);
+        if(status != 200){
+            addUsersUrl(linkMap);
+            return linkMap;
+        };
+        addLogoutUrl(linkMap);
+        addImagesUrl(linkMap);
         return linkMap;
     }
 }

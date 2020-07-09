@@ -8,10 +8,9 @@ import spark.utils.StringUtils;
 
 import java.util.Map;
 
-import static projectMTDS.utils.Utils.gson;
-import static projectMTDS.utils.Utils.logger;
+import static projectMTDS.utils.Utils.*;
 
-public abstract class API {
+abstract class API {
     private static class ResponseBody {
         private Object response;
         private Map<String, String> _links;
@@ -25,12 +24,12 @@ public abstract class API {
         return StringUtils.isEmpty(parameter);
     }
 
-    protected static String getParameterFromBody(String body, String fieldName){
+    static String getParameterFromBody(String body, String fieldName){
         JsonObject jsonObject = gson.fromJson(body, JsonObject.class);
         return jsonObject.get(fieldName).getAsString();
     }
 
-    protected static void logRequestData(Request request) {
+    static void logRequestData(Request request) {
         logger.info("New API call - Path: " + request.pathInfo() + "\n\t\t" +
                 "Request method: " + request.requestMethod() + "\n\t\t" +
                 "Content type: " + request.contentType() + "\n\t\t" +
@@ -50,8 +49,50 @@ public abstract class API {
         return gson.toJson(new Message("Invalid session", "/"));
     }
 
-    public static void addUrl(Map<String, String> resources, String resourceName, String resourceUrl){
-        resources.put(resourceName, resourceUrl);
+    static String unauthorized(Response response){
+        response.status(401);
+        return gson.toJson(new Message("Unauthorized", "/"));
+    }
+
+    static String resourceNotFound(Response response){
+        response.status(404);
+        return gson.toJson(new Message("Not found", "/"));
+    }
+
+    static void addImageUrl(Map<String, String> linkMap){
+        linkMap.put("image_by_id", IMAGE_API_URL);
+    }
+
+    static void addImageUrlById(Map<String, String> linkMap, String id){
+        linkMap.put("image", imageUrl(id));
+    }
+
+    static void addUploadedImageUrl(Map<String, String> linkMap, String imageId){
+        linkMap.put("uploaded_image", imageId);
+    }
+
+    static void addImagesUrl(Map<String, String> linkMap){
+        linkMap.put("images", IMAGES_API_URL);
+    }
+
+    static void addUsersUrl(Map<String, String> linkMap){
+        linkMap.put("users", USERS_API);
+    }
+
+    static void addGetImagePreviewsUrl(Map<String, String> linkMap){
+        linkMap.put("image_previews", PREVIEW_API_URL);
+    }
+
+    static void addSelfUrl(Map<String, String> linkMap, String url){
+        linkMap.put("self", url);
+    }
+
+    static void addLoginUrl(Map<String, String> linkMap){
+        linkMap.put("login", LOGIN_API_URL);
+    }
+
+    static void addLogoutUrl(Map<String, String> linkMap){
+        linkMap.put("logout", LOGOUT_API_URL);
     }
 
     static String createResponseBody(Object response, Map<String, String> links){

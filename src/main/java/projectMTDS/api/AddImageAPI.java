@@ -37,11 +37,11 @@ public class AddImageAPI extends API{
             String imageId = modelManager.addImage(userId, image.getName(), imageExtension, request.raw().getPart("uploaded_image").getInputStream());
 
             if (imageId != null) {
-                image = modelManager.getImage(userId, imageId);
+                image = modelManager.getImage(imageId);
                 createImagesFolder();
                 logger.info("New Image added with name: " + image.getName() + " into repository of " + userId);
                 response.status(201);
-                return createResponseBody(relatedLinks());
+                return createResponseBody(relatedLinks(imageId));
             }
         } catch (Exception e) {
             logger.info(e.getMessage());
@@ -66,9 +66,12 @@ public class AddImageAPI extends API{
         return extension.equals("jpg") || extension.equals("png") ? extension : null;
     }
 
-    static private Map<String, String> relatedLinks(){
+    static private Map<String, String> relatedLinks(String imageId){
         Map<String, String> linkMap = new HashMap<>();
-        addUrl(linkMap, "redirect_to", GALLERY_URL);
+        addSelfUrl(linkMap, IMAGES_API_URL);
+        addUploadedImageUrl(linkMap, imageUrl(imageId));
+        addImagesUrl(linkMap);
+        addLogoutUrl(linkMap);
         return linkMap;
     }
 }

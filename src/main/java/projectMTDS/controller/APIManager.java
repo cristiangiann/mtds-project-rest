@@ -21,6 +21,7 @@ public class APIManager {
             path("/users", () -> {
                 get("", GetUsersAPI::call);
                 post("", AddUserAPI::call);
+                get("/:userId", GetImagesAPI::call);
             });
         });
     }

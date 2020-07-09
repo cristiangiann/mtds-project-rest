@@ -38,7 +38,9 @@ public class AddUserAPI extends API{
 
     static private Map<String, String> relatedLinks(){
         Map<String, String> linkMap = new HashMap<>();
-        addUrl(linkMap, "redirect_to", HOME_PAGE_URL);
+        addLoginUrl(linkMap);
+        addUsersUrl(linkMap);
+        addSelfUrl(linkMap, USERS_API);
         return linkMap;
     }
 }

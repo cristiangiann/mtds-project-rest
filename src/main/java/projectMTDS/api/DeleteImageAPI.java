@@ -16,8 +16,8 @@ public class DeleteImageAPI extends API{
         ModelManager modelManager = ModelManager.getInstance();
 
         logRequestData(request);
-        String userId = authenticator.getUserFromSession(request.cookies());
-        if(userId == null) return invalidSession(response);
+        String loggedUser = authenticator.getUserFromSession(request.cookies());
+        if(loggedUser == null) return invalidSession(response);
 
         String imageId = request.params(":id");
         if(emptyParameter(imageId)){
@@ -25,19 +25,26 @@ public class DeleteImageAPI extends API{
             return gson.toJson("Image ID is not valid.");
         }
 
-        if(!modelManager.existImage(userId, imageId)){
-            response.status(404);
-            return gson.toJson("Image " + imageId + " not found in the repository of " + userId);
+        if(!modelManager.existImage(imageId)) {
+            logger.info("Image " + imageId + "not found");
+            return resourceNotFound(response);
         }
 
-        modelManager.deleteImage(userId, imageId);
+        if(!modelManager.getImage(imageId).getUserId().equals(loggedUser)) {
+            logger.info("User " + loggedUser + " is not authorized to retrieve image " + imageId);
+            return unauthorized(response);
+        }
+        logger.info("Image " + imageId + " deleted");
+        modelManager.deleteImage(imageId);
         response.status(200);
-        return createResponseBody(relatedLinks());
+        return createResponseBody(relatedLinks(imageId));
     }
 
-    static private Map<String, String> relatedLinks(){
+    static private Map<String, String> relatedLinks(String imageId) {
         Map<String, String> linkMap = new HashMap<>();
-        addUrl(linkMap, "redirect_to", GALLERY_URL);
+        addSelfUrl(linkMap, imageUrl(imageId));
+        addImagesUrl(linkMap);
+        addLogoutUrl(linkMap);
         return linkMap;
     }
 }

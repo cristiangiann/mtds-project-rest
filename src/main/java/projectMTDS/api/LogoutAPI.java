@@ -7,8 +7,7 @@ import spark.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-import static projectMTDS.utils.Utils.HOME_PAGE_URL;
-import static projectMTDS.utils.Utils.gson;
+import static projectMTDS.utils.Utils.LOGOUT_API_URL;
 
 public class LogoutAPI extends API {
     public static String call(Request request, Response response) {
@@ -19,7 +18,7 @@ public class LogoutAPI extends API {
         String userId = authenticator.getUserFromSession(request.cookies());
         if (userId == null){
             response.status(404);
-            return gson.toJson("Invalid session");
+            return createResponseBody(relatedLinks());
         }
 
         authenticator.logout(request.cookies());
@@ -30,7 +29,9 @@ public class LogoutAPI extends API {
 
     static private Map<String, String> relatedLinks(){
         Map<String, String> linkMap = new HashMap<>();
-        addUrl(linkMap, "redirect_to", HOME_PAGE_URL);
+        addSelfUrl(linkMap, LOGOUT_API_URL);
+        addLoginUrl(linkMap);
+        addUsersUrl(linkMap);
         return linkMap;
     }
 }
