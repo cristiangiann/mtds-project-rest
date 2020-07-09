@@ -12,9 +12,10 @@ public class Utils {
     public static final String LOGIN_API_URL = "/login";
     public static final String LOGOUT_API_URL = "/logout";
     public static final String IMAGES_API_URL = "/api/images";
-    public static final String IMAGE_API_URL = "/api/images/{id}";
+    public static final String IMAGE_API_URL = "/api/images/{imageId}";
     public static final String PREVIEW_API_URL = "/api/images/{id}/preview";
     public static final String USERS_API = "/api/users";
+    public static final String IMAGES_BY_USER_URL = "/api/users/{userId}";
 
     public static String imagePreviewUrl(String id){
         return "/api/images/" + id + "/preview";

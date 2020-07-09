@@ -1,11 +1,11 @@
 package projectMTDS.api;
 
 import com.google.gson.JsonObject;
-import projectMTDS.utils.Message;
 import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static projectMTDS.utils.Utils.*;
@@ -43,20 +43,22 @@ abstract class API {
                 "Image details: " + request.raw().getParameter("image_properties"));
     }
 
-    static String invalidSession(Response response){
+    static String invalidSession(Response response, Map<String, String> relatedLinks){
         logger.info("Bad Request error - Invalid session");
         response.status(401);
-        return gson.toJson(new Message("Invalid session", "/"));
+        return createResponseBody(relatedLinks);
     }
 
-    static String unauthorized(Response response){
+    static String unauthorized(Response response, Map<String, String> relatedLinks){
+        logger.info("User not logged to access the resource");
         response.status(401);
-        return gson.toJson(new Message("Unauthorized", "/"));
+        return createResponseBody(relatedLinks);
     }
 
-    static String resourceNotFound(Response response){
+    static String resourceNotFound(Response response, Map<String, String> relatedLinks){
+        logger.info("Resource not found");
         response.status(404);
-        return gson.toJson(new Message("Not found", "/"));
+        return createResponseBody(relatedLinks);
     }
 
     static void addImageUrl(Map<String, String> linkMap){
@@ -83,6 +85,10 @@ abstract class API {
         linkMap.put("image_previews", PREVIEW_API_URL);
     }
 
+    static void addGetImageByUserUrl(Map<String, String> linkMap){
+        linkMap.put("image_previews", PREVIEW_API_URL);
+    }
+
     static void addSelfUrl(Map<String, String> linkMap, String url){
         linkMap.put("self", url);
     }
@@ -102,5 +108,12 @@ abstract class API {
 
     static String createResponseBody(Map<String, String> links){
         return createResponseBody(null, links);
+    }
+
+    static Map<String, String> invalidSessionRelatedLinks(){
+        Map<String, String> linkMap = new HashMap<>();
+        addLoginUrl(linkMap);
+        addUsersUrl(linkMap);
+        return linkMap;
     }
 }

@@ -22,7 +22,7 @@ public class AddUserAPI extends API{
             logger.info("User not created - Invalid parameters - " +
                     "userId: " + userId + ", userName: " + userName + ", password: " + password);
             response.status(400);
-            return gson.toJson("User not created. Parameters are not valid.");
+            return createResponseBody(relatedLinks());
         }
 
         if(authenticator.addUser(userId, userName, password)) {
@@ -33,7 +33,7 @@ public class AddUserAPI extends API{
 
         logger.info("User not created - User with ID " + userId + " already exists");
         response.status(409);
-        return gson.toJson("User " + userId + " already exists.");
+        return createResponseBody(relatedLinks());
     }
 
     static private Map<String, String> relatedLinks(){

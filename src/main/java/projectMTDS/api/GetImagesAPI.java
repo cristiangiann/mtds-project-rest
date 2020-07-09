@@ -18,13 +18,13 @@ public class GetImagesAPI extends API{
         logRequestData(request);
 
         String loggedUser = authenticator.getUserFromSession(request.cookies());
-        if(loggedUser == null) return invalidSession(response);
+        if(loggedUser == null) return invalidSession(response, relatedLinks());
 
         String userId = request.params("userId");
         if(userId == null) userId = loggedUser;
         else if(!userId.equals(loggedUser)) {
             logger.info("User: " + loggedUser + " is not authorized to get images of " + userId);
-            return unauthorized(response);
+            return unauthorized(response, relatedLinks());
         }
 
         logger.info("GET images received by user " + userId);

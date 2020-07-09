@@ -17,22 +17,23 @@ public class DeleteImageAPI extends API{
 
         logRequestData(request);
         String loggedUser = authenticator.getUserFromSession(request.cookies());
-        if(loggedUser == null) return invalidSession(response);
+        if(loggedUser == null) return invalidSession(response, invalidSessionRelatedLinks());
 
         String imageId = request.params(":id");
         if(emptyParameter(imageId)){
+            logger.info("Image id :" + imageId + " is not valid");
             response.status(400);
-            return gson.toJson("Image ID is not valid.");
+            return createResponseBody(relatedLinks(imageId));
         }
 
         if(!modelManager.existImage(imageId)) {
-            logger.info("Image " + imageId + "not found");
-            return resourceNotFound(response);
+            logger.info("Image " + imageId + " not found");
+            return resourceNotFound(response, relatedLinks(imageId));
         }
 
         if(!modelManager.getImage(imageId).getUserId().equals(loggedUser)) {
             logger.info("User " + loggedUser + " is not authorized to retrieve image " + imageId);
-            return unauthorized(response);
+            return unauthorized(response, relatedLinks(imageId));
         }
         logger.info("Image " + imageId + " deleted");
         modelManager.deleteImage(imageId);

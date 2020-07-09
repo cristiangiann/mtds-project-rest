@@ -22,13 +22,13 @@ public class GetImageAPI extends API{
 
         logRequestData(request);
         String loggedUserId = authenticator.getUserFromSession(request.cookies());
-        if(loggedUserId == null) return invalidSession(response);
+        if(loggedUserId == null) return invalidSession(response, invalidSessionRelatedLinks());
 
         String imageId = request.params(":id");
 
         Image image = modelManager.getImage(imageId);
-        if(image == null) return resourceNotFound(response);
-        if (!image.getUserId().equals(loggedUserId)) return unauthorized(response);
+        if(image == null) return resourceNotFound(response, relatedLinks(imageId, 404, preview));
+        if (!image.getUserId().equals(loggedUserId)) return unauthorized(response, relatedLinks(imageId, 401, preview));
         Path path = Paths.get(Config.IMAGE_FOLDER_DIRECTORY).resolve(preview ? image.getPreviewFileName() : image.getFileName());
         File file = path.toFile();
 
@@ -38,10 +38,13 @@ public class GetImageAPI extends API{
                 ImageIO.write(ImageIO.read(file), image.getExtension(), out);
                 return createResponseBody(String.join("", Files.readAllLines(path)), relatedLinks(imageId, 200, preview));
             } catch (IOException e) {
-                return "Exception occurred while reading file" + e.getMessage();
+                logger.info("Internal Server Error getting image " + imageId);
             }
+        } else {
+            logger.info("Internal Server Error: image with id " + imageId + " does not exist");
         }
-        return "File does not exist";
+        response.status(500);
+        return createResponseBody(relatedLinks(imageId, response.status(), preview));
     }
 
     static private Map<String, String> relatedLinks(String id, int status, boolean preview){

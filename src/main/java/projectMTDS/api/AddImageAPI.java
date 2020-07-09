@@ -24,12 +24,12 @@ public class AddImageAPI extends API{
 
         logRequestImageFormData(request);
         String userId = authenticator.getUserFromSession(request.cookies());
-        if(userId == null) return invalidSession(response);
+        if(userId == null) return invalidSession(response, invalidSessionRelatedLinks());
         try {
             Image image = gson.fromJson(request.raw().getParameter("image_properties"), Image.class);
-            if (emptyParameter(userId) || emptyParameter(image.getName())) {
+            if (emptyParameter(image.getName())) {
                 response.status(400);
-                return gson.toJson("Image not created. Username or Image name are not valid.");
+                return createResponseBody(relatedLinks(response.status(), null));
             }
 
             String imageExtension = getImageExtension(request.raw().getPart("uploaded_image"));
@@ -41,16 +41,16 @@ public class AddImageAPI extends API{
                 createImagesFolder();
                 logger.info("New Image added with name: " + image.getName() + " into repository of " + userId);
                 response.status(201);
-                return createResponseBody(relatedLinks(imageId));
+                return createResponseBody(relatedLinks(response.status(), imageId));
             }
         } catch (Exception e) {
             logger.info(e.getMessage());
             response.status(415);
-            return gson.toJson("Unsupported media type");
+            return createResponseBody(relatedLinks(response.status(), null));
         }
         logger.info("Error - Error uploading image - return 400 status");
         response.status(400);
-        return gson.toJson("Error uploading image");
+        return createResponseBody(relatedLinks(response.status(), null));
     }
 
     private static void createImagesFolder() {
@@ -66,10 +66,14 @@ public class AddImageAPI extends API{
         return extension.equals("jpg") || extension.equals("png") ? extension : null;
     }
 
-    static private Map<String, String> relatedLinks(String imageId){
+    static private Map<String, String> relatedLinks(int status, String imageId){
         Map<String, String> linkMap = new HashMap<>();
         addSelfUrl(linkMap, IMAGES_API_URL);
-        addUploadedImageUrl(linkMap, imageUrl(imageId));
+        if(status == 401) {
+            addLoginUrl(linkMap);
+            return linkMap;
+        }
+        if(status == 201) addUploadedImageUrl(linkMap, imageUrl(imageId));
         addImagesUrl(linkMap);
         addLogoutUrl(linkMap);
         return linkMap;
