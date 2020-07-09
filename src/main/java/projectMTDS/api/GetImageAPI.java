@@ -36,7 +36,6 @@ public class GetImageAPI extends API{
             response.raw().setContentType("image/" + image.getExtension());
             try (OutputStream out = response.raw().getOutputStream()) {
                 ImageIO.write(ImageIO.read(file), image.getExtension(), out);
-                return createResponseBody(String.join("", Files.readAllLines(path)), relatedLinks(imageId, 200, preview));
             } catch (IOException e) {
                 logger.info("Internal Server Error getting image " + imageId);
             }

@@ -13,10 +13,12 @@ public class APIManager {
         path("/api", () -> {
             path("/images", () -> {
                 get("", GetImagesAPI::call);
-                get("/:id", (request, response) -> GetImageAPI.call(request, response, false));
-                get("/:id/preview", (request, response) -> GetImageAPI.call(request, response, true));
                 post("", AddImageAPI::call);
-                delete("/:id", DeleteImageAPI::call);
+                path("/:id", () ->{
+                    get("", (request, response) -> GetImageAPI.call(request, response, false));
+                    delete("", DeleteImageAPI::call);
+                    get("/preview", (request, response) -> GetImageAPI.call(request, response, true));
+                });
             });
             path("/users", () -> {
                 get("", GetUsersAPI::call);
