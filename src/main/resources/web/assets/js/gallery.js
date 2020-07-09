@@ -85,9 +85,8 @@ async function deleteImage(item) {
     try {
         let response = await fetch(item.url, options);
         let status = response.status;
-        let body = await response.json();
         if (status === 200) {
-            document.location.href = body._links.redirect_to;
+            document.location.href = "/pages/gallery.html";
         }
     } catch (e) {
         console.log("An error occured!");
@@ -111,7 +110,7 @@ async function uploadImage() {
         let status = response.status;
         let body = await response.json();
         if (status === 201) {
-            document.location.href = body._links.redirect_to;
+            document.location.href = "/pages/gallery.html";
         }
     } catch (e) {
         console.log("An error occured!");

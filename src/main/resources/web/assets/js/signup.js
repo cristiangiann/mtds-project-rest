@@ -11,11 +11,9 @@ async function signUp() {
 
     try {
         let response = await fetch("/api/users", options);
-        console.log(response.status);
-        let status = await response.status;
-        let body = await response.json();
+        let status = response.status;
         if (status === 201) {
-            document.location.href = body._links.redirect_to;
+            document.location.href = "/";
         }
     } catch (e) {
         console.log("An error occured!");
