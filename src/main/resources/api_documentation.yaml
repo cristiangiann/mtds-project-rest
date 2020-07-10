@@ -1,0 +1,649 @@
+---
+swagger: "2.0"
+info:
+  description: "Design of the APIs of a web server used to manage images of users"
+  version: "1.0.0"
+  title: "Image Server"
+  contact:
+    email: "cristian.giannetti@mail.polimi.it"
+host: "localhost"
+basePath: "/"
+tags:
+  - name: "User"
+    description: "Users registered in the website"
+  - name: "Image"
+    description: "Image file stored in the web server"
+paths:
+  /login:
+    post:
+      tags:
+        - "User"
+      summary: "User login in the website"
+      description: "Send credentials to view the personal page, returns a cookie to save the session identifier"
+      operationId: "login"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "credentials"
+          in: "body"
+          description: "user credentials"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              userId:
+                type: string
+                example: "user1"
+              password:
+                type: string
+                example: "strongpassword"
+      responses:
+        "200":
+          description: "Successful login"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+                  self:
+                    type: string
+                    example: "/login"
+        "401":
+          description: "Invalid credentials"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  users:
+                    type: string
+                    example: "/api/users"
+                  self:
+                    type: string
+                    example: "/login"
+  /logout:
+    post:
+      tags:
+        - "User"
+      summary: "User logout from the website"
+      description: "Close session"
+      operationId: "logout"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Successful logout"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/logout"
+                  login:
+                    type: string
+                    example: "/login"
+                  users:
+                    type: string
+                    example: "/api/users"
+        "404":
+          description: "Session not found"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/logout"
+                  login:
+                    type: string
+                    example: "/login"
+                  users:
+                    type: string
+                    example: "/api/users"
+  /images:
+    get:
+      tags:
+        - "Image"
+      summary: "Get user's images"
+      description: "Get the list of all the images of the logged user"
+      operationId: "getImages"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Successful"
+          schema:
+            type: "object"
+            properties:
+              resource:
+                type: "array"
+                items:
+                  properties:
+                    id:
+                      type: string
+                      example: "8e895d2c-a4c8-48b3-b62b-0f70022dd72d"
+                    name:
+                      type: string
+                      example: "Image Name 1"
+                    url:
+                      type: string
+                      example: "/api/images/8e895d2c-a4c8-48b3-b62b-0f70022dd72d"
+                    previewUrl:
+                      type: string
+                      example: "/api/images/8e895d2c-a4c8-48b3-b62b-0f70022dd72d/preview"
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  image:
+                    type: string
+                    example: "/api/images/{id}"
+                  image_previews:
+                    type: string
+                    example: "/api/images/{id}/preview"
+                  self:
+                    type: string
+                    example: "/api/images"
+        "401":
+          description: "Unauthorized user"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/images"
+                  logout:
+                    type: string
+                    example: "/logout"
+                  login:
+                    type: string
+                    example: "/login"
+                  image:
+                    type: string
+                    example: "/api/images/{id}"
+                  image_previews:
+                    type: string
+                    example: "/api/images/{id}/preview"
+    post:
+      tags:
+        - "Image"
+      summary: "Upload new image"
+      description: "Upload new image on the server with name and a png/jpg file"
+      operationId: "newImage"
+      consumes:
+        - multipart/form-data
+      produces:
+        - "application/json"
+      parameters:
+        - name: "name"
+          in: "formData"
+          type: "string"
+          description: "Name of the image"
+          required: true
+        - name: "image"
+          in: "formData"
+          type: "file"
+          description: "Image to be uploaded"
+          required: true
+      responses:
+        "201":
+          description: "Successful upload"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/images"
+                  uploaded_image:
+                    type: string
+                    example: "/api/images/8e895d2c-a4c8-48b3-b62b-0f70022dd72d"
+                  images:
+                    type: string
+                    example: "/api/images"
+                  logout:
+                    type: string
+                    example: "/logout"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/images"
+                  images:
+                    type: string
+                    example: "/api/images"
+                  logout:
+                    type: string
+                    example: "/logout"
+        "401":
+          description: "Invalid session"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  login:
+                    type: string
+                    example: "/login"
+                  users:
+                    type: string
+                    example: "/api/users"
+        "415":
+          description: "Unsupported media type"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/images"
+                  images:
+                    type: string
+                    example: "/api/images"
+                  logout:
+                    type: string
+                    example: "/logout"
+  /images/{id}:
+    get:
+      tags:
+        - "Image"
+      summary: "Get image by ID"
+      description: "Get image file by its identifier"
+      operationId: "imageById"
+      produces:
+        - "image/png"
+        - "image/jpg"
+        - "application/json"
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: ID of the image to get
+      responses:
+        "200":
+          description: "Retrieve image"
+        "401":
+          description: "Unauthorized user"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+        "404":
+          description: "Image not found"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+        "500":
+          description: "Internal server error"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+
+    delete:
+      tags:
+        - "Image"
+      summary: "Delete image by ID"
+      description: "Delete image file by its identifier"
+      operationId: "deleteImageById"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: ID of the image to get
+      responses:
+        "200":
+          description: "Resource deleted"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/images/8e895d2c-a4c8-48b3-b62b-0f70022dd72d"
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+        "401":
+          description: "Unauthorized user"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+        "404":
+          description: "Image not found"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+  /images/{id}/preview:
+    get:
+      tags:
+        - "Image"
+      summary: "Get image by ID"
+      description: "Get image file by its identifier"
+      operationId: "imagePreview"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: ID of the image to get
+      responses:
+        "200":
+          description: "Retrieve image preview"
+        "401":
+          description: "Unauthorized user"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+        "404":
+          description: "Image not found"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+        "500":
+          description: "Internal server error"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  images:
+                    type: string
+                    example: "/api/images"
+  /users/{id}:
+    get:
+      tags:
+        - "Image"
+      summary: "Get images by User ID"
+      description: "Get the list of all the images of the specified user"
+      operationId: "getImagesByUserId"
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: ID of the user to get the images from
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Successful"
+          schema:
+            type: "object"
+            properties:
+              resource:
+                type: "array"
+                items:
+                  properties:
+                    id:
+                      type: string
+                      example: "8e895d2c-a4c8-48b3-b62b-0f70022dd72d"
+                    name:
+                      type: string
+                      example: "Image Name 1"
+                    url:
+                      type: string
+                      example: "/api/images/8e895d2c-a4c8-48b3-b62b-0f70022dd72d"
+                    previewUrl:
+                      type: string
+                      example: "/api/images/8e895d2c-a4c8-48b3-b62b-0f70022dd72d/preview"
+              _links:
+                type: "object"
+                properties:
+                  logout:
+                    type: string
+                    example: "/logout"
+                  image:
+                    type: string
+                    example: "/api/images/{id}"
+                  image_previews:
+                    type: string
+                    example: "/api/images/{id}/preview"
+                  self:
+                    type: string
+                    example: "/api/users/user1"
+        "401":
+          description: "Unauthorized user"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/users/user1"
+                  logout:
+                    type: string
+                    example: "/logout"
+                  login:
+                    type: string
+                    example: "/login"
+                  image:
+                    type: string
+                    example: "/api/images/{id}"
+                  image_previews:
+                    type: string
+                    example: "/api/images/{id}/preview"
+  /users:
+    get:
+      tags:
+        - "User"
+      summary: "Get list of users"
+      description: "Get the list of all the users registered in the application"
+      operationId: "getUsers"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Successful"
+          schema:
+            type: "object"
+            properties:
+              resource:
+                type: "array"
+                items:
+                  properties:
+                    id:
+                      type: string
+                      example: "userId1"
+                    name:
+                      type: string
+                      example: "User Name"
+                    url:
+                      type: string
+                      example: "/users/u1"
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/users"
+                  login:
+                    type: string
+                    example: "/login"
+                  users:
+                    type: string
+                    example: "/api/users"
+    post:
+      tags:
+        - "User"
+      summary: "Add new user"
+      description: "Send user's data to create a new user in the system"
+      operationId: "addUser"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "data"
+          in: "body"
+          description: "user data"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: string
+                example: "user1"
+              name:
+                type: string
+                example: "User Name"
+              password:
+                type: string
+                example: "strongpassword"
+      responses:
+        "201":
+          description: "Successful"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/users"
+                  login:
+                    type: string
+                    example: "/login"
+                  users:
+                    type: string
+                    example: "/api/users"
+        "400":
+          description: "Invalid parameters"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/users"
+                  login:
+                    type: string
+                    example: "/login"
+                  users:
+                    type: string
+                    example: "/api/users"
+        "409":
+          description: "User with selected ID already exists"
+          schema:
+            type: "object"
+            properties:
+              _links:
+                type: "object"
+                properties:
+                  self:
+                    type: string
+                    example: "/api/users"
+                  login:
+                    type: string
+                    example: "/login"
+                  users:
+                    type: string
+                    example: "/api/users"
