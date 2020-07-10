@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static projectMTDS.controller.Config.IMAGE_FOLDER_DIRECTORY;
@@ -13,8 +14,6 @@ public class ModelManager {
     private static ModelManager modelManager = null;
     private HashMap<String, User> usersMap;
     private HashMap<String, Image> imagesMap;
-
-    private int lastImageId;
 
     private ModelManager(){
         usersMap = new HashMap<>();
@@ -43,7 +42,6 @@ public class ModelManager {
     }
 
     public void addUser(String id, String name){
-        //TODO: check values
         if(getUser(id) == null) usersMap.put(id, new User(id, name));
     }
 
@@ -57,8 +55,7 @@ public class ModelManager {
     }
 
     private String createNewImageId(){
-        lastImageId++;
-        return String.valueOf(lastImageId);
+        return UUID.randomUUID().toString();
     }
 
     public void deleteImage(String imageId){
