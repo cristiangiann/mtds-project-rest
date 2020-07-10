@@ -41,10 +41,9 @@ function addShowButton(item, blockId){
     showButton.className = 'btn btn-primary btn-sm';
     showButton.innerHTML = '<img src="../assets/img/icon/show.svg"> Show';
 
-    let showModal = function() {
+    showButton.onclick = function () {
         openModal(url, imageName);
     };
-    showButton.onclick = showModal;
     document.getElementById(blockId).appendChild(showButton);
 }
 
@@ -54,10 +53,9 @@ function addDeleteButton(item, blockId){
     deleteButton.className = 'btn btn-danger btn-sm';
     deleteButton.innerHTML = '<img src="../assets/img/icon/bin.svg"> Delete';
 
-    let deleteImageOnClick = function() {
+    deleteButton.onclick = function () {
         deleteImage(item);
     };
-    deleteButton.onclick = deleteImageOnClick;
 
     document.getElementById(blockId).appendChild(deleteButton);
 }
@@ -94,11 +92,9 @@ async function deleteImage(item) {
 }
 
 async function uploadImage() {
-    const imageProperties = {
-        name: document.getElementById('inputImageName').value
-    };
+    const name = document.getElementById('inputImageName').value
     const formData = new FormData();
-    formData.append('image_properties', JSON.stringify(imageProperties));
+    formData.append('name', name);
     formData.append('uploaded_image', document.getElementById('inputImageFile').files[0]);
     const options = {
         method: 'POST',
@@ -108,7 +104,6 @@ async function uploadImage() {
     try {
         let response = await fetch("/api/images", options);
         let status = response.status;
-        let body = await response.json();
         if (status === 201) {
             document.location.href = "/pages/gallery.html";
         }

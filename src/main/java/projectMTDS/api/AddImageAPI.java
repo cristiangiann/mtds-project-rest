@@ -26,18 +26,18 @@ public class AddImageAPI extends API{
         String userId = authenticator.getUserFromSession(request.cookies());
         if(userId == null) return invalidSession(response, invalidSessionRelatedLinks());
         try {
-            Image image = gson.fromJson(request.raw().getParameter("image_properties"), Image.class);
-            if (emptyParameter(image.getName())) {
+            String imageName = request.raw().getParameter("name");
+            if (emptyParameter(imageName)) {
                 response.status(400);
                 return createResponseBody(relatedLinks(response.status(), null));
             }
 
             String imageExtension = getImageExtension(request.raw().getPart("uploaded_image"));
             if(imageExtension == null) throw new InvalidNameException("Error - Unsupported media type");
-            String imageId = modelManager.addImage(userId, image.getName(), imageExtension, request.raw().getPart("uploaded_image").getInputStream());
+            String imageId = modelManager.addImage(userId, imageName, imageExtension, request.raw().getPart("uploaded_image").getInputStream());
 
             if (imageId != null) {
-                image = modelManager.getImage(imageId);
+                Image image = modelManager.getImage(imageId);
                 createImagesFolder();
                 logger.info("New Image added with name: " + image.getName() + " into repository of " + userId);
                 response.status(201);

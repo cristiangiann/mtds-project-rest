@@ -1,6 +1,7 @@
 package projectMTDS.api;
 
 import com.google.gson.JsonObject;
+import org.eclipse.jetty.http.BadMessageException;
 import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
@@ -37,10 +38,15 @@ abstract class API {
     }
 
     static void logRequestImageFormData(Request request){
-        logger.info("New API call - Path: " + request.pathInfo() + "\n\t\t" +
-                "Request method: " + request.requestMethod() + "\n\t\t" +
-                "Content type: " + request.contentType() + "\n\t\t" +
-                "Image details: " + request.raw().getParameter("image_properties"));
+        try {
+            logger.info("New API call - Path: " + request.pathInfo() + "\n\t\t" +
+                    "Request method: " + request.requestMethod() + "\n\t\t" +
+                    "Content type: " + request.contentType() + "\n\t\t" +
+                    "Image details: " + request.raw().getParameter("image_properties"));
+        } catch (BadMessageException e) {
+            logger.info(e.getMessage() + "\n\t\t" +
+                    "Bad request received");
+        }
     }
 
     static String invalidSession(Response response, Map<String, String> relatedLinks){
