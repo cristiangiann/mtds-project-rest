@@ -69,10 +69,6 @@ public class AddImageAPI extends API{
     static private Map<String, String> relatedLinks(int status, String imageId){
         Map<String, String> linkMap = new HashMap<>();
         addSelfUrl(linkMap, IMAGES_API_URL);
-        if(status == 401) {
-            addLoginUrl(linkMap);
-            return linkMap;
-        }
         if(status == 201) addUploadedImageUrl(linkMap, imageUrl(imageId));
         addImagesUrl(linkMap);
         addLogoutUrl(linkMap);

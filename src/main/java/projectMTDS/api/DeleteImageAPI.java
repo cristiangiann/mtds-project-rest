@@ -20,12 +20,6 @@ public class DeleteImageAPI extends API{
         if(loggedUser == null) return invalidSession(response, invalidSessionRelatedLinks());
 
         String imageId = request.params(":id");
-        if(emptyParameter(imageId)){
-            logger.info("Image id :" + imageId + " is not valid");
-            response.status(400);
-            return createResponseBody(relatedLinks(imageId));
-        }
-
         if(!modelManager.existImage(imageId)) {
             logger.info("Image " + imageId + " not found");
             return resourceNotFound(response, relatedLinks(imageId));

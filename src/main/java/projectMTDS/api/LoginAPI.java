@@ -20,8 +20,9 @@ public class LoginAPI extends API {
 
         String sessionId = authenticator.login(userId, password);
         if(sessionId == null){
+            logger.info("Login error - Invalid credentials");
             response.status(401);
-            createResponseBody(relatedLinks(response.status()));
+            return createResponseBody(relatedLinks(response.status()));
         }
 
         logger.info("User " + userId + " successfully logged in - Session id: " + sessionId);
