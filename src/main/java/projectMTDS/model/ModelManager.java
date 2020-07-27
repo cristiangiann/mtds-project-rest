@@ -73,6 +73,7 @@ public class ModelManager {
         try (InputStream is = inputImage) {
             byte[] buffer = new byte[is.available()];
             is.read(buffer);
+            System.out.println(IMAGE_FOLDER_DIRECTORY + image.getFileName());
             File targetFile = new File(IMAGE_FOLDER_DIRECTORY + image.getFileName());
             OutputStream outStream = new FileOutputStream(targetFile);
             outStream.write(buffer);

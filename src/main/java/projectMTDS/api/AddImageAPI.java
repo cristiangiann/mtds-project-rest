@@ -9,11 +9,9 @@ import spark.Response;
 import javax.naming.InvalidNameException;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.Part;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static projectMTDS.controller.Config.IMAGE_FOLDER_DIRECTORY;
 import static projectMTDS.utils.Utils.*;
 
 public class AddImageAPI extends API{
@@ -38,7 +36,6 @@ public class AddImageAPI extends API{
 
             if (imageId != null) {
                 Image image = modelManager.getImage(imageId);
-                createImagesFolder();
                 logger.info("New Image added with name: " + image.getName() + " into repository of " + userId);
                 response.status(201);
                 return createResponseBody(relatedLinks(response.status(), imageId));
@@ -51,11 +48,6 @@ public class AddImageAPI extends API{
         logger.info("Error - Error uploading image - return 400 status");
         response.status(400);
         return createResponseBody(relatedLinks(response.status(), null));
-    }
-
-    private static void createImagesFolder() {
-        File folder = new File(IMAGE_FOLDER_DIRECTORY);
-        folder.mkdirs();
     }
 
     private static String getImageExtension(Part part) {
