@@ -22,6 +22,7 @@ public class GetUsersAPI extends API {
         Map<String, String> linkMap = new HashMap<>();
         addLoginUrl(linkMap);
         addUsersUrl(linkMap);
+        addGetImagesByUserUrl(linkMap);
         addSelfUrl(linkMap, USERS_API);
         return linkMap;
     }

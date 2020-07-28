@@ -557,7 +557,7 @@ paths:
                       example: "User Name"
                     url:
                       type: string
-                      example: "/users/u1"
+                      example: "/api/users/userId1"
               _links:
                 type: "object"
                 properties:
@@ -567,9 +567,9 @@ paths:
                   login:
                     type: string
                     example: "/login"
-                  users:
+                  images_by_user:
                     type: string
-                    example: "/api/users"
+                    example: "/api/users/{id}"
     post:
       tags:
         - "User"

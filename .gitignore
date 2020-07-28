@@ -35,3 +35,4 @@ hs_err_pid*
 # Files
 /src/main/resources/web/service-worker.js
 /web/service-worker.js
+/images/

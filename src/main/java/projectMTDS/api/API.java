@@ -91,8 +91,8 @@ abstract class API {
         linkMap.put("image_previews", PREVIEW_API_URL);
     }
 
-    static void addGetImageByUserUrl(Map<String, String> linkMap){
-        linkMap.put("image_previews", PREVIEW_API_URL);
+    static void addGetImagesByUserUrl(Map<String, String> linkMap){
+        linkMap.put("images_by_user", IMAGES_BY_USER_URL);
     }
 
     static void addSelfUrl(Map<String, String> linkMap, String url){
