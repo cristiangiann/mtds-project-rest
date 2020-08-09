@@ -36,15 +36,15 @@ The implemented APIs are the following (icon 🔒 means that a non-logged user i
   Method: POST  
   Endpoint: /api/images
 + #### Get single image 🔒
-  Retrieve an image file.
+  Retrieve an image file.  
   Method: GET  
   Endpoint: /api/images/:id
 + #### Delete single Image 🔒
-  Delete a single image from the logged user's repository  
+  Delete a single image from the logged user's repository.  
   Method: DELETE  
   Endpoint: /api/images/:id
 + #### Get preview of single Image 🔒
-  Retrieve a small preview of an image  
+  Retrieve a small preview of an image.  
   Method: GET  
   Endpoint: /api/images/:id/preview
 + #### Get list of images of single User 🔒
