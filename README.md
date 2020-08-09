@@ -40,7 +40,7 @@ The implemented APIs are the following (icon 🔒 means that a non-logged user i
   Method: GET  
   Endpoint: /api/images/:id
 + #### Delete single Image 🔒
-  Delete a single image from the logged user's repository
+  Delete a single image from the logged user's repository  
   Method: DELETE  
   Endpoint: /api/images/:id
 + #### Get preview of single Image 🔒
