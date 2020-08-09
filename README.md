@@ -44,7 +44,7 @@ The implemented APIs are the following (icon 🔒 means that a non-logged user i
   Method: DELETE  
   Endpoint: /api/images/:id
 + #### Get preview of single Image 🔒
-  Retrieve a small preview of an image
+  Retrieve a small preview of an image  
   Method: GET  
   Endpoint: /api/images/:id/preview
 + #### Get list of images of single User 🔒
